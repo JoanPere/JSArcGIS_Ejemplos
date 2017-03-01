@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+
+  <title>Service Area Task</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+  <style>
+    html, body, #mapDiv {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    #info {
+      bottom: 20px;
+      color: #444;
+      height: auto;
+      font-family: arial, sans-serif;
+      left: 20px;
+      margin: 5px;
+      padding: 10px;
+      position: absolute;
+      text-align: left;
+      width: 200px;
+      z-index: 40;
+    }
+  </style>
+
+  <script src="https://js.arcgis.com/3.19/"></script>
+  <script>
+    require([
+      "esri/Color",
+      "esri/map",
+      "esri/graphic",
+      "esri/graphicsUtils",
+      "esri/tasks/Geoprocessor",
+      "esri/tasks/FeatureSet",
+      "esri/symbols/SimpleMarkerSymbol",
+      "esri/symbols/SimpleLineSymbol",
+      "esri/symbols/SimpleFillSymbol"
+    ], function(Color, Map, Graphic, graphicsUtils, Geoprocessor, FeatureSet, SimpleMarkerSymbol, SimpleLineSymbol,
+                SimpleFillSymbol) {
+
+      var map, gp;
+      var gpUrl = "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Network/ESRI_DriveTime_US/GPServer/CreateDriveTimePolygons";
+      var driveTimes = "1 2 3";
+
+      // Initialize map, GP and image params
+      map = new Map("mapDiv", {
+        basemap: "streets",
+        center: [-95.255, 38.96],
+        zoom: 12
+      });
+      //Nos creamos el objeto geoprocessor con la url del GPServer
+      gp = new Geoprocessor(gpUrl);
+      gp.setOutputSpatialReference(map.spatialReference);
+      
+      //al hacer click en el mapa se lanzará la función computeServiceArea
+      map.on("click", computeServiceArea);
+
+
+      //funcion que prepara los parámetros de entrada y lanza el geoprocesamiento
+      function computeServiceArea(evt) {
+        map.graphics.clear();
+        var pointSymbol = new SimpleMarkerSymbol();
+        pointSymbol.setOutline = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1);
+        pointSymbol.setSize(14);
+        pointSymbol.setColor(new Color([0, 255, 0, 0.25]));
+        //se crea el gráfico a partir del punto sobre el que ha pulsado el usuario en el mapa y se añade a la capa gráfica
+        var graphic = new Graphic(evt.mapPoint, pointSymbol);
+        map.graphics.add(graphic);
+
+        //se crea el gráfico a partir del punto sobre el que ha pulsado el usuario en el mapa y se añade a la capa gráfica
+        var featureSet = new FeatureSet();
+
+
+        //array para almacenar las entidades que formaran parte de los input parameter
+        var features = [];
+        features.push(graphic);
+        //se añade el array de gráficos a la propiedad features del FeatureSet
+        featureSet.features = features;
+        
+
+
+
+        //se crea un objeto con tantas propiedades como parámetros de entrada
+                //el nombre de las propiedades de este objeto tiene que ser el mismo que el que tiene el GP
+                //en cada una de estas propiedades se añade el valor correspondiente, previamente creado
+        var params = { 
+          "Input_Location": featureSet,
+          "Drive_Times": driveTimes 
+        };
+
+
+        //se ejecuta el geoprocesamiento, pasándole los parámetros y la función de callback
+                //en este caso se usa el método execute, ya que el gp es síncrono
+        gp.execute(params, getDriveTimePolys);
+      }
+
+
+
+      //función de callback del geoprocesamiento, recibe dos parámetros del mensaje de respuesta del gp
+      function getDriveTimePolys(results, messages) {
+        //se obtiene el featureSet del primer elemento del array de resultados (primer parámetro de salida del gp)
+                //la propiedad value de este objeto del primer elemento es de tipo FeatureSet (ver el api rest del servicio de gp)
+        var features = results[0].value.features;
+        // add drive time polygons to the map
+        for (var f = 0, fl = features.length; f < fl; f++) {
+          var feature = features[f];
+          if (f === 0) {
+            var polySymbolRed = new SimpleFillSymbol();
+            polySymbolRed.setOutline(new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 0, 0, 0.5]), 1));
+            polySymbolRed.setColor(new Color([255, 0, 0, 0.7]));
+            feature.setSymbol(polySymbolRed);
+          }
+          else if (f == 1) {
+            var polySymbolGreen = new SimpleFillSymbol();
+            polySymbolGreen.setOutline(new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                new Color([0, 0, 0, 0.5]), 1));
+            polySymbolGreen.setColor(new Color([0, 255, 0, 0.7]));
+            feature.setSymbol(polySymbolGreen);
+          }
+          else if (f == 2) {
+            var polySymbolBlue = new SimpleFillSymbol();
+            polySymbolBlue.setOutline(new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 0, 0, 0.5]), 1));
+            polySymbolBlue.setColor(new Color([0, 0, 255, 0.7]));
+            feature.setSymbol(polySymbolBlue);
+          }
+          map.graphics.add(feature);
+        }
+            //se actualiza el extent del mapa al extent total de la capa de gráficos
+            //para obtener el extent de una capa de gráficos, se usa el método graphicsExtent de graphicsUtils
+        map.setExtent(graphicsUtils.graphicsExtent(features), true);
+      }
+    });
+  </script>
+</head>
+<body>
+  <div id="mapDiv"></div>
+  <div id="info" class="esriSimpleSlider">
+    Haz Click en el mapa para usar el Geoprocesamiento, se crearán los polígonos de tiempos de conducción para 1, 2 y 3 minutos.
+  </div>
+</body>
+</html>
