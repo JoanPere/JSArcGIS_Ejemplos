@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+   
+   <title>ArcGIS API for JavaScript | Rutas</title>
+   <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
+   <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+   <!-- Optional theme -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+   <!-- Latest compiled and minified JavaScript -->
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+   <style>
+      html,
+      body,
+      #mapDiv {
+         height: 100%;
+         width: 100%;
+         margin: 0;
+         padding: 0;
+         float: "left";
+      }
+      #contenedor {
+         position: fixed;
+         height: 100%;
+
+         width: 100%;
+      }
+      #search {
+         display: block;
+         z-index: 2;
+         top: 20px;
+         left: 74px;
+      }
+      #layerListPane{
+         width:25%;
+         height: 100%;
+      }  
+      #layerList{
+         display: block;
+         z-index: 2;
+         margin-top: 10px;
+         right: 5px;
+      }
+      #scaleBarDiv{
+         display: block;
+         position: absolute;
+         z-index: 2;
+         bottom: 20px;
+         left: 120px;
+      }
+      #BasemapToggle {
+         position: absolute;
+         bottom: 60px;
+         right: 20px;
+         z-index: 50;
+      }
+      #HomeButton {
+         position: absolute;
+         top: 95px;
+         left: 20px;
+         z-index: 50;
+       }
+   </style>
+
+   </script>
+    <script src="https://js.arcgis.com/3.19/"></script>
+   <script>
+      var map;
+      //id del webMap
+      var webMap = "";
+      //servicio de NAServer
+      var naService = "";
+      var stops_ary = [];
+
+
+      require([
+        "esri/map",
+        "esri/arcgis/utils",
+        "esri/dijit/Search",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
+        "esri/layers/FeatureLayer",
+        "esri/InfoTemplate",
+        "esri/dijit/LayerList",
+        "esri/dijit/BasemapToggle",
+        "esri/dijit/OverviewMap",
+        "dojo/parser",
+        "esri/layers/ArcGISTiledMapServiceLayer",
+        "esri/dijit/HomeButton",
+        "esri/dijit/Scalebar",
+        "esri/symbols/PictureMarkerSymbol",
+        "esri/graphic",
+        "esri/tasks/RouteTask",
+        "esri/tasks/RouteParameters",
+        "esri/tasks/FeatureSet",
+        "esri/layers/GraphicsLayer",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/Color",
+        "esri/toolbars/draw",
+
+        "dojo/_base/connect",
+        "dojo/on",
+
+        "dijit/layout/BorderContainer", 
+        "dijit/layout/AccordionContainer",
+        "dijit/layout/AccordionPane",
+        "dijit/layout/TabContainer",
+         "dijit/layout/ContentPane",
+
+         "dijit/form/ToggleButton",
+         "dojo/domReady!"
+      ], function (Map,
+         arcgisUtils,
+         Search,
+         ArcGISDynamicMapServiceLayer,
+         FeatureLayer,
+         InfoTemplate,
+         LayerList,
+         BasemapToggle,
+         OverviewMap,
+         parser,
+         ArcGISTiledMapServiceLayer,
+         HomeButton,
+         Scalebar,
+         PictureMarkerSymbol,
+         Graphic,
+         RouteTask,
+         RouteParameters,
+         FeatureSet,
+         GraphicsLayer,
+         SimpleLineSymbol,
+         SimpleFillSymbol,
+         Color,
+         Draw,
+         connect,
+         on) {
+         
+         parser.parse();
+
+
+         //Símbolo para los puntos
+         var marker = new PictureMarkerSymbol();
+         marker.setOffset(0, 10);
+         marker.setHeight(20);
+         marker.setWidth(20);
+         marker.setUrl("http://img3.wikia.nocookie.net/__cb20140427224234/caramelangel714/images/7/72/Location_Icon.png");
+
+
+
+
+        //creación del mapa a partir de un ID de un WebMap
+         arcgisUtils.createMap(webMap, "mapDiv").then(function(response){
+            //obtener el mapa a partir de la respuesta de createMap
+            map = response.map;
+            
+
+            //enlazar los botones con las funciones para borrar los puntos y borrar las barreras
+            btn_borrar = document.getElementById("borrarPTS");
+            btn_borrar.onclick = function (){
+              borrarpuntos();
+            }
+
+              //Creamos el widget de home button
+            var home = new HomeButton({
+                  map: map
+               }, "HomeButton");
+            //Se inicializa el widget
+            home.startup();
+
+            //evento click del mapa enlazado con la función addstops
+            map.on("click", addStops);
+            
+            //se crea una graphics layer para dibujar la ruta
+            gl = new GraphicsLayer();
+            map.addLayer(gl);
+
+           
+         });
+
+        //función que borra los gráficos de los puntos, la ruta y también el array en el que se han almacenado las paradas
+        function borrarpuntos(){
+          gl.clear();
+          map.graphics.clear();
+          stops_ary = [];
+        }
+
+
+         //función que se lanza con el evento click del mapa. crea un gráfico y lo añade a la capa de gráficos para los puntos, añade un gráfico al array de paradas. Si ya hay dos o más puntos calcula la ruta
+         function addStops(evt){
+            var isActivated = document.getElementById("on").checked;
+            if(isActivated){
+               var pt = evt.mapPoint;
+               var gr = new Graphic(pt, marker);
+               stops_ary.push(gr);
+               map.graphics.add(gr);
+               if(stops_ary.length>=2){
+                calcularRuta();
+               }
+            }
+
+         };
+
+
+         //función que calcula la ruta
+         function calcularRuta(){
+            
+            //1-.CREAR EL ROUTE TASK
+            //se crea la routeTask con el servicio de NAService
+            
+            //2-.CREAR EL OBJETO ROUTE PARAMETERS
+            //se crea el objeto RouteParameters
+
+
+            
+            //3-. CREAR UN FEATURE SET PARA LA PROPIEDAD DE STOPS DEL ROUTETASK
+            //se crea un featureSet para la propiedad de paradas y se añade el array de gráficos en la propiedad features del featureSet
+
+
+            //4-.AÑADIR EL ARRAY CON LOS GRÁFICOS DE LAS PARADAS AL ROUTE PARAMS
+
+
+            gl.clear();
+
+            //5-.LANZAR EL MÉTODO SOLVE DEL ROUTE TASK, PASÁNDOLE LOS PARÁMETROS DE ENTRADA, LA FUNCIÓN DE CALLBACK Y LA FUNCIÓN DE ERROR
+            //se lanza el método para solucionar la ruta, en el que se le pasan los parámetros de la ruta, la función de callback y la función de error
+            
+         }
+
+         //función de callback de la ruta
+         function showRoute(solveResult){
+            //1-. SE ACCEDE A LA PROPIEDAD routeResults que devuelve un array con los resultados
+            
+            //2-. SE ACCEDE A LA PRIMERA RUTA, ES DECIR, AL PRIMER ELEMENTO DEL ARRAY
+
+            //3-. SE ACCEDE AL GRÁFICO DE RUTA, ACCEDIENDO A LA PROPIEDAD route
+
+            //4-. SE LE AÑADE UNA SIMBOLOGÍA A ESE GRÁFICO
+
+            //5-. SE AÑADE EL GRÁFICO A UNA CAPA DE GRÁFICOS
+            
+         }
+
+         function errorRoute(msg){
+            gl.clear();
+            alert("No se ha podido calcular la ruta usando esas paradas");
+            borrarpuntos();
+         }
+
+      });
+   </script>
+</head>
+
+<body class="claro">
+   <div id="contenedor" data-dojo-type="dijit/layout/BorderContainer">
+      
+      <div id="mapDiv" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter:true, region:'center'">
+         <div id="search"></div>
+         <div id="BasemapToggle"></div>
+         <div id="HomeButton"></div>
+         <div id="scaleBarDiv"></div>
+      </div>
+      <div id="layerListPane" data-dojo-type="dijit/layout/AccordionContainer" data-dojo-props="splitter:true, region:'leading'">
+            <div data-dojo-type="dijit/layout/AccordionPane" title="Lista de Capas">
+               <div id="layerList"></div>
+            </div>
+            <div id="routeUI" data-dojo-type="dijit/layout/AccordionPane" title="Rutas" >
+               <form>
+                  <div>Añadir puntos:</div>
+                  <div class="btn-group" role="group" aria-label="...">
+                     <div class="radio">
+                        <label><input id="on" name="points" type="radio" class="radio" title="On">On</label>
+                     </div>
+                     <div class="radio">
+                        <label><input id="off" name="points" type="radio" class="radio" checked="true" title="Off">Off</label>
+                     </div>
+                  </div>
+                  
+                  <div>Añadir barreras:</div>
+                  <div class="btn-group" role="group" aria-label="...">
+                     <div class="radio">
+                        <label><input id="barriersOn" name="barriers" type="radio" class="radio" title="On">On</label>
+                     </div>
+                     <div class="radio">
+                        <label><input id="barriersOff" name="barriers" type="radio" class="radio" checked="true" title="Off">Off</label>
+                     </div>
+                  </div>
+                  <div>
+                    <button type="button" id="borrarPTS" class="btn btn-success">Borrar puntos</button>
+                    <button type="button" id="borrarBarreras" class="btn btn-danger">Borrar barreras</button>
+                  </div>
+               </form>
+            </div>
+      </div>
+   </div>
+</body>
+
+</html>
