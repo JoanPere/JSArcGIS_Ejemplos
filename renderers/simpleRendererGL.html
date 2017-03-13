@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>		
+		var urlCities = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0";
+
+		require(["esri/map",
+			"esri/symbols/SimpleMarkerSymbol",
+  			"esri/renderers/SimpleRenderer",
+  			"dojo/_base/Color",
+			"esri/layers/FeatureLayer",
+			"esri/tasks/query",
+			"esri/tasks/QueryTask",
+			"esri/graphic",
+      		"esri/layers/GraphicsLayer",
+      		"esri/symbols/PictureMarkerSymbol",
+			"dojo/domReady!"], 
+		function(Map, 
+			SimpleMarkerSymbol,
+			SimpleRenderer,
+			Color,
+			FeatureLayer,
+			Query,
+			QueryTask,
+			Graphic,
+			GraphicsLayer,
+			PictureMarkerSymbol) {
+	    // code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "gray",
+		    	isPanArrows: true
+		  	});
+
+    		var graphicLayer = new GraphicsLayer();
+    		    		
+  			var symbol = new SimpleMarkerSymbol();
+			symbol.style = SimpleMarkerSymbol.STYLE_SQUARE;
+			symbol.setSize(10);
+			symbol.setColor(new Color([255,0,0,0.5]));
+
+			//se crea un simpleRenderer
+			var renderer = new SimpleRenderer(symbol);
+
+			//se aplica el renderer a la capa de gráficos
+    		graphicLayer.setRenderer(renderer);
+        	
+        	map.addLayer(graphicLayer);
+
+        	//QUERY
+        	//constructor
+        	var myQuery = new Query();
+        	myQuery.where = "pop2000 > 1000000";
+			myQuery.outFields = ["areaname", "pop2000"];
+			myQuery.returnGeometry = true;
+			myQuery.outSpatialReference = map.spatialReference;
+			
+			var myQueryTask = new QueryTask(urlCities);
+						
+			map.on("click",function(evt){
+				myQueryTask.execute(myQuery,show);
+			});
+
+			function show(fsResult){
+				graphicLayer.clear();
+				var features = fsResult.features;				
+				for (var i = 0; i<features.length; i++){
+					graphicLayer.add(features[i]);
+				}
+				
+			};
+
+	  });
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>

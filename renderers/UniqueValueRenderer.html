@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>		
+		var urlfeat = "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Specialty/ESRI_StateCityHighway_USA/MapServer/1";
+
+		require(["esri/map",
+  			"esri/InfoTemplate",
+      		"esri/symbols/SimpleLineSymbol",
+      		"esri/symbols/SimpleFillSymbol",
+      		"esri/renderers/UniqueValueRenderer",
+  			"dojo/_base/Color",
+			"esri/layers/FeatureLayer",
+			"dojo/domReady!"], 
+		function(Map, 
+			InfoTemplate,
+			SimpleLineSymbol,
+			SimpleFillSymbol,
+			UniqueValueRenderer,
+			Color,
+			FeatureLayer) {
+ 
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "dark-gray",
+		    	isPanArrows: true
+		  	});
+    		var renderer, featureLayer;
+
+    		map.on("load",function(){
+	    		//definimos la simbología por defecto
+	    		var defaultSymbol = new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
+	        	defaultSymbol.outline.setStyle(SimpleLineSymbol.STYLE_NULL);
+
+	        	//construimos el renderer, con el simbolo por defecto y el campo que queremos que sea significativo para aplicar el renderizado
+	        	renderer = new UniqueValueRenderer(defaultSymbol, "SUB_REGION");
+
+	        	//añadimos los símbolos para cada posible valor
+	        	renderer.addValue("Pacific", new SimpleFillSymbol().setColor(new Color([255, 0, 0, 0.5])));
+		        renderer.addValue("Mtn", new SimpleFillSymbol().setColor(new Color([0, 255, 0, 0.5])));
+		        renderer.addValue("N Eng", new SimpleFillSymbol().setColor(new Color([0, 0, 255, 0.5])));
+		        renderer.addValue("S Atl", new SimpleFillSymbol().setColor(new Color([255, 0, 255, 0.5])));
+		        renderer.addValue("Mid Atl", new SimpleFillSymbol().setColor(new Color([255, 255, 255, 0.75])));
+		        renderer.addValue("E N Cen", new SimpleFillSymbol().setColor(new Color([0, 255, 255, 0.5])));
+		        renderer.addValue("W N Cen", new SimpleFillSymbol().setColor(new Color([255, 255, 0, 0.5])));
+		        renderer.addValue("E S Cen", new SimpleFillSymbol().setColor(new Color([127, 127, 127, 0.5])));
+		        renderer.addValue("W S Cen", new SimpleFillSymbol().setColor(new Color([0, 0, 0, 0.5])));
+
+		        featureLayer = new FeatureLayer(urlfeat, {
+	            	infoTemplate: new InfoTemplate(" ", "${SUB_REGION}"),
+	            	mode: FeatureLayer.MODE_ONDEMAND,
+	            	outFields: ["SUB_REGION"]
+	          	});
+
+			    map.addLayer(featureLayer);
+    		});		    
+	  		
+	  		map.on("click", function(){
+	  			featureLayer.setRenderer(renderer);
+	  			featureLayer.refresh();
+	  		});
+
+		});
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>

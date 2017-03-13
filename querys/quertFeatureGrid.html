@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+		<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<style>
+	html, body {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	#mapDiv{
+		height: 80%;	
+	}
+	#contenedor{
+		height: 100%;
+	}
+	#grid{
+		height: 20%;
+		width: 100%;		
+	}
+	thead{
+		height: 10%;
+	}
+
+	#tbody {
+		width: 100%;
+		overflow-x: auto;
+		overflow-y: scroll;
+		height: 90%;
+	}
+	#table {
+		width: 100%;
+		overflow-x: auto;
+		height: 100%;
+	}
+	</style>
+
+	<script>
+		var map;
+		//url de los servicios
+		var urlDynamic = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer";
+		var urlCities = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0";
+
+		require(["esri/map",
+			"esri/geometry/Circle",
+			"esri/layers/ArcGISDynamicMapServiceLayer",
+			"esri/tasks/query",
+			"esri/tasks/QueryTask",
+			"esri/geometry/Polygon",
+			"esri/symbols/PictureMarkerSymbol",
+			"esri/symbols/SimpleFillSymbol", 
+      		"esri/graphic",
+      		"esri/layers/GraphicsLayer",
+      		"esri/Color",
+      		"esri/layers/FeatureLayer",
+			"dojo/domReady!"], 
+
+
+		function(Map, Circle, ArcGISDynamicMapServiceLayer, Query, QueryTask, Polygon, PictureMarkerSymbol, SimpleFillSymbol, Graphic, GraphicsLayer, Color, FeatureLayer) {
+		    
+
+		    //creamos el objeto mapa
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "topo"
+		  	});
+
+		    //creamos la capa dinámica y la añadimos al mapa
+		    dynamLayer = new ArcGISDynamicMapServiceLayer(urlDynamic,{id:"usa",opacity:0.5});
+        	map.addLayer(dynamLayer);
+
+        	/*//creamos la capa de entidades y la añadimos al mapa
+        	var featLayer = new FeatureLayer(urlCities);
+        	map.addLayer(featLayer);*/
+
+        	//creamos una capa de gráficos y la añadimos al mapa
+        	var graphicLayer = new GraphicsLayer();
+        	map.addLayer(graphicLayer);
+
+        	//QUERY
+        	//constructor
+        	var myQuery = new Query();
+        	//criterio por atributos
+        	myQuery.where = "pop2000 > 500000";
+ 			
+			//Atributos de salida
+			myQuery.outFields = ["areaname", "pop2000", "objectid"];
+			//myQuery.outFields = ["*"];
+			//si queremos que devuelva la geometría
+			myQuery.returnGeometry = true;
+			myQuery.outSpatialReference = map.spatialReference;
+			var route;
+			
+
+			//QUERYTASK
+				//Creamos la queryTask
+			var myQueryTask = new QueryTask(urlCities);
+
+			map.on("click",function(evt){
+				//criterio espacial
+        			//creamos una geometria
+        		var circle = new Circle({
+           			center: evt.mapPoint,
+            		radius: 600000
+          		});
+        			//añadimos la geometría a la query
+				myQuery.geometry = circle;
+					//aplicamos el criterio espacial		
+				myQuery.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
+				
+				var symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, null, new Color([255,0,0,0.2]));
+        			//se crea el objeto gráfico con la geometría de intersección (el círculo), y con la simbología definida anteriormente
+        		var gr = new Graphic(circle, symbol);
+        		
+        		//se borran todos los gráficos de la capa de gráficos
+        		graphicLayer.clear();
+        		graphicLayer.add(gr);
+        		
+				
+				//ejecutamos la query y cuando finalize la consulta lanzamos la función show
+				myQueryTask.execute(myQuery,show);
+				
+			});
+
+			function show(fsResult){
+					//se recoge el array de entidades que hay dentro del feature result que nos devuelve la función show
+				var features = fsResult.features;
+					//se borran todos los gráficos de la capa de gráficos del mapa
+				map.graphics.clear();
+					//se lanza la función borrar tabla
+				borrarTabla();
+					//condición para comprobar si hay algún resultado
+				if(features.length!=0){
+						//se crea el símbolo
+					var ptPicSymbol = new PictureMarkerSymbol("https://static.arcgis.com/images/Symbols/Shapes/BluePin1LargeB.png", 35, 35);
+						//se recorre el array de entidades			
+					for (var i = 0; i<features.length; i++){
+							//se añade una simbología a cada entidad
+						features[i].symbol = ptPicSymbol;
+							//se añade la entidad al mapa
+						map.graphics.add(features[i]);
+							//se ejecuta la función poblar tabla
+						poblarTabla(features[i])
+					}
+				} else {
+					alert("no se ha encontrado ninguna entidad que cumpla las condiciones");
+				}
+			};
+
+			//función que añade una fila con los respectivos valores de los atributos a la tabla
+			function poblarTabla(feature){
+				var tabla = document.getElementById("tbody");
+					//se recuperan los atributos de la entidad que llega a la función
+				var atributos = feature.attributes;
+				var oid = atributos.objectid;
+				var nombre = atributos.areaname;
+				var poblacion = atributos.pop2000;
+					//se crea un elemento fila para la tabla
+				var fila = document.createElement("tr");
+				var filaData = [oid, nombre, poblacion];
+					//se recorren los datos de los atributos
+				for(i in filaData){
+						//se crea un elemento celda
+					var celda = document.createElement("td");
+						//se crea un elemento de texto con el valor del atributo
+					var textoCelda = document.createTextNode(filaData[i])
+						//se añade el valor a la celda
+					celda.appendChild(textoCelda);
+						//se añade la celda a la fila
+					fila.appendChild(celda);
+				}
+					//se añade la fila a la tabla
+				tabla.appendChild(fila);
+			};
+
+				//función que borra todas las filas de una tabla
+			function borrarTabla(){
+					//se recoje la tabla
+				var tabla = document.getElementById("tbody");
+					//se comprueba que la tabla tenga algún elemento
+				if (tabla.firstChild){
+						//mientras la tabla tenga una fila, se borrará este elemento
+					while(tabla.firstChild){
+						tabla.removeChild(tabla.firstChild);
+					};
+				}
+			};
+	  	});
+	</script>
+	</head>
+	<body class="claro">
+		<div id="contenedor">
+	  		<div id="mapDiv"></div>
+	  		<div id="grid" class="table-responsive" >
+	  			<table id="tabla" class="table table-striped">
+	  				<thead>
+	  					<tr>
+		  					<th>OID </th>
+		  					<th>Región</th>
+		  					<th>Población</th>
+		  				</tr>
+	  				</thead>
+	  				<tbody id="tbody" class="pre-scrollable">
+		  				
+	  				</tbody>
+	  			</table>
+	  		</div>
+  		</div>	
+  	</body>
+</html>

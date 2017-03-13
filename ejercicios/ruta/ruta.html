@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html dir="ltr">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+
+   <title>ArcGIS API for JavaScript | Rutas</title>
+   <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
+   <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+   <!-- Optional theme -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+   <!-- Latest compiled and minified JavaScript -->
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+   <style>
+      html,
+      body,
+      #mapDiv {
+         height: 100%;
+         width: 100%;
+         margin: 0;
+         padding: 0;
+         float: "left";
+      }
+      #contenedor {
+         position: fixed;
+         height: 100%;
+
+         width: 100%;
+      }
+      #search {
+         display: block;
+         z-index: 2;
+         top: 20px;
+         left: 74px;
+      }
+      #layerListPane{
+         width:25%;
+         height: 100%;
+      }  
+      #layerList{
+         display: block;
+         z-index: 2;
+         margin-top: 10px;
+         right: 5px;
+      }
+      #scaleBarDiv{
+         display: block;
+         position: absolute;
+         z-index: 2;
+         bottom: 20px;
+         left: 120px;
+      }
+      #BasemapToggle {
+         position: absolute;
+         bottom: 60px;
+         right: 20px;
+         z-index: 50;
+      }
+      #HomeButton {
+         position: absolute;
+         top: 95px;
+         left: 20px;
+         z-index: 50;
+       }
+      #modos{
+        margin-top: 10px;
+      }
+      #velocidadform{
+        margin-top: 10px;
+      }
+      #velocidadform{
+        margin-top: 10px;
+      }
+      #tiempoRuta{
+        margin-top: 50px;
+      }
+      #distRuta{
+        margin-top: 10px;
+      }
+   </style>
+
+   </script>
+    <script src="https://js.arcgis.com/3.19/"></script>
+   <script>
+      var map;
+      var webMap = "b18703b7eeb549a8835f9be3571ca641";
+      var naService = "http://formacion.esri.es/server/rest/services/EscenarioMadrid/NetworkMadird/NAServer/Route";
+
+       var naService2 = "https://formacion.esri.es/server/rest/services/EscenarioMadrid/RedMadridTravelModes2/NAServer/Route";
+      var stops_ary = [];
+
+
+      require([
+        "esri/map",
+        "esri/arcgis/utils",
+        "esri/dijit/Search",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
+        "esri/layers/FeatureLayer",
+        "esri/InfoTemplate",
+        "esri/dijit/LayerList",
+        "esri/dijit/BasemapToggle",
+        "esri/dijit/OverviewMap",
+        "dojo/parser",
+        "esri/layers/ArcGISTiledMapServiceLayer",
+        "esri/dijit/HomeButton",
+        "esri/dijit/Scalebar",
+        "esri/symbols/PictureMarkerSymbol",
+        "esri/graphic",
+        "esri/tasks/RouteTask",
+        "esri/tasks/RouteParameters",
+        "esri/tasks/FeatureSet",
+        "esri/layers/GraphicsLayer",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/Color",
+        "esri/toolbars/draw",
+        "esri/InfoTemplate",
+
+        "dojo/_base/connect",
+        "dojo/on",
+
+        "dijit/layout/BorderContainer", 
+        "dijit/layout/AccordionContainer",
+        "dijit/layout/AccordionPane",
+        "dijit/layout/TabContainer",
+         "dijit/layout/ContentPane",
+
+         "dijit/form/ToggleButton",
+         "dojo/domReady!"
+      ], function (Map,
+         arcgisUtils,
+         Search,
+         ArcGISDynamicMapServiceLayer,
+         FeatureLayer,
+         InfoTemplate,
+         LayerList,
+         BasemapToggle,
+         OverviewMap,
+         parser,
+         ArcGISTiledMapServiceLayer,
+         HomeButton,
+         Scalebar,
+         PictureMarkerSymbol,
+         Graphic,
+         RouteTask,
+         RouteParameters,
+         FeatureSet,
+         GraphicsLayer,
+         SimpleLineSymbol,
+         SimpleFillSymbol,
+         Color,
+         Draw,
+         InfoTemplate,
+         connect,
+         on) {
+         
+         parser.parse();
+
+
+         //Símbolo para los puntos
+         var marker = new PictureMarkerSymbol();
+         marker.setOffset(0, 10);
+         marker.setHeight(20);
+         marker.setWidth(20);
+         marker.setUrl("http://img3.wikia.nocookie.net/__cb20140427224234/caramelangel714/images/7/72/Location_Icon.png");
+
+         //Símnolo para las barreras
+          var line = new SimpleLineSymbol();
+          line.setStyle(SimpleLineSymbol.STYLE_DASH);
+          line.setColor(new Color([255, 0, 0, 1]));
+          var fillSymbol = new SimpleFillSymbol();
+          fillSymbol.setColor(new Color([255, 0, 0, 0.38]));
+          fillSymbol.setOutline(line);
+
+
+        //creación del mapa a partir de un ID de un WebMap
+         arcgisUtils.createMap(webMap, "mapDiv").then(function(response){
+            //obtener el mapa a partir de la respuesta de createMap
+            map = response.map;
+            
+            //creación de la barra de dibujo
+            toolbar = new Draw(map, {
+              tooltipOffset: 20,
+              drawTime: 90
+            });
+            //establecer el símbolo para dibujar polígonos
+            toolbar.setFillSymbol(fillSymbol);
+
+
+            //enlazar los activadores para dibujar las barreras
+            activeBarr = document.getElementById("barriersOn");
+            activeBarr.onclick = function(){
+              //lanza la función para activa la barra de dibujo
+              activeBarriers(true);
+            };
+
+
+            deActiveBarr = document.getElementById("barriersOff");
+            deActiveBarr.onclick = function (){
+              //lanza la función para desactiva la barra de dibujo
+              activeBarriers(false);
+            };
+
+            //enlazar los botones con las funciones para borrar los puntos y borrar las barreras
+            btn_borrar = document.getElementById("borrarPTS");
+            btn_borrar.onclick = function (){
+              borrarpuntos();
+            }
+            btn_borrar = document.getElementById("borrarBarreras");
+            btn_borrar.onclick = function (){
+              borrarbarreras();
+            }
+
+             var velocidadForm = document.getElementById("velocidadform");
+            //modo de ruta
+            var modoEle = document.getElementById("modosRuta");
+            modoEle.onchange = function(){
+              if(modoEle.value == 1){
+                velocidadForm.style.visibility= 'visible';
+              }else{
+                velocidadForm.style.visibility= 'hidden';
+              }
+              if(stops_ary.length>=2){
+                calcularRuta();
+              }
+            };
+
+            var velocidad = document.getElementById("velocidad");
+            velocidad.onchange = function(){
+              if(stops_ary.length>=2){
+                calcularRuta();
+              }
+            };
+
+            //se crea el widget LayerList
+               //el mapa se obtiene de la variable response
+               //las capas las obtenemos usando el método de getLayerList y como parámetro la respuesta
+            var obj = arcgisUtils.getLayerList(response);
+            var myWidget = new LayerList({
+               map: response.map,
+               layers: obj 
+            },"layerList");
+
+              //se inicializa el widget
+            myWidget.startup();
+
+            //Creamos el widget de overviewmap y lo situamos abajo a la izquierda de nuestra aplicación
+            //también definimos el basemap que va a mostrar este widget
+            var overviewMapDijit = new OverviewMap({
+               attachTo: "bottom-left",
+               opacity: 0.5,
+               baseLayer: new ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Light_Gray_Base/MapServer"),
+               map: map,
+               visible: false
+            });
+            //Se inicializa el widget
+            overviewMapDijit.startup();
+
+              //Creamos el widget de home button
+            var home = new HomeButton({
+                  map: map
+               }, "HomeButton");
+            //Se inicializa el widget
+            home.startup();
+
+            //creamos el widget de la escala
+            var scalebar = new Scalebar({
+                  map: map,
+                  scalebarStyle: "ruler",
+                  scalebarUnit: "metric"
+            });
+
+            //evento click del mapa enlazado con la función addstops
+            map.on("click", addStops);
+            
+            //se crea una graphics layer para dibujar la ruta
+            gl = new GraphicsLayer();
+            map.addLayer(gl);
+
+
+            //se crea una capa de graficos para dibujar las barreras
+            glPolBarriers = new GraphicsLayer();
+            map.addLayer(glPolBarriers);
+
+            
+            //se enlaza el evento drawEnd con una función anónima. Esta función se lanzará cuando la barra de dibujo terminé de dibujar una geometría
+            var drawEnd_connect = connect.connect(toolbar, "onDrawEnd", function(geometry) {
+              //se crea un gráfico con la geometría que ha devuelto el evento y se añade a la gl
+              glPolBarriers.add(new Graphic(geometry, fillSymbol));
+              //se desactiva la barra de dibujo
+              toolbar.deactivate();
+              //se actualiza el estado de la interfaz de usuario
+              activeBarr = document.getElementById("barriersOn").checked = false;
+              deActiveBarr = document.getElementById("barriersOff").checked = true;
+              
+              //si ya hay dos o más puntos se lanza la función calcular ruta
+              if(stops_ary.length>=2){
+                calcularRuta();
+              }
+            });
+         });
+
+        //función que borra los gráficos de los puntos, la ruta y también el array en el que se han almacenado las paradas
+        function borrarpuntos(){
+          gl.clear();
+          map.graphics.clear();
+          stops_ary = [];
+         }
+
+         //función que borra las barreras y recalcula la ruta en el caso de que haya dos o más puntos
+        function borrarbarreras(){
+          glPolBarriers.clear();
+          if(stops_ary.length>=2){
+              calcularRuta();
+          }
+        }
+
+        //función que activa o desactiva la barra de dibujo
+         function activeBarriers(active){
+          if(active){
+            document.getElementById("on").checked = false;
+            document.getElementById("off").checked = true;
+            toolbar.activate(Draw.POLYGON);
+          }else{
+             toolbar.deactivate();
+          }
+         }
+
+        //función que activa o desactiva el añadir puntos
+         function activeAddPoints(active){
+          if(active){
+            document.getElementById("on").checked = true;
+            document.getElementById("off").checked = false;
+            
+          }else{
+            document.getElementById("on").checked = false;
+            document.getElementById("off").checked = true;
+          }
+         }
+
+         //función que se lanza con el evento click del mapa. crea un gráfico y lo añade a la capa de gráficos para los puntos, añade un gráfico al array de paradas. Si ya hay dos o más puntos calcula la ruta
+         function addStops(evt){
+            var isActivated = document.getElementById("on").checked;
+            if(isActivated){
+               var pt = evt.mapPoint;
+               var gr = new Graphic(pt, marker);
+               stops_ary.push(gr);
+               map.graphics.add(gr);
+               if(stops_ary.length>=2){
+                calcularRuta();
+               }
+            }
+
+         };
+
+
+         //función que calcula la ruta
+         function calcularRuta(){
+            
+            //se crea la routeTask con el servicio de NAService
+            var routeTask = new RouteTask(naService2);
+
+            //se crea el objeto RouteParameters
+            var routeParams = new RouteParameters();
+
+            //se crea un featureSet para la propiedad de paradas y se añade el array de gráficos en la propiedad features del featureSet
+            routeParams.stops = new FeatureSet();
+            routeParams.stops.features = stops_ary;
+
+            //se crea un featureSet para las barreras de polígonos y se añaden los gráficos ya dibujados
+            routeParams.polygonBarriers = new FeatureSet();
+            routeParams.polygonBarriers.features = glPolBarriers.graphics;
+
+            
+            routeParams.ignoreInvalidLocations = true;
+            routeParams.findBestSequence = true;
+            routeParams.preserveFirstStop = true;
+            routeParams.preserveLastStop = false;
+            routeParams.returnDirections = true;
+
+            //modo de ruta
+            modo = document.getElementById("modosRuta").value;
+
+            objtModo = calcularModo(modo)
+            routeParams.travelMode = objtModo;
+
+            gl.clear();
+
+            //se lanza el método para solucionar la ruta, en el que se le pasan los parámetros de la ruta, la función de callback y la función de error
+            routeTask.solve(routeParams, showRoute, errorRoute);
+            activeAddPoints(false);
+         }
+
+         
+
+         //función de callback de la ruta
+         function showRoute(solveResult){
+            //la ruta se encuentra en la propiedad route del primer elemento de resultado
+            var routeResult = solveResult.routeResults[0];
+            var route = routeResult.route;
+            
+
+
+            //showDirections(routeResult.directions);
+           
+            
+            var tiempo;
+            if(modo == 1){
+              tiempo = route.attributes.Total_TiempoAPie;
+              line = new SimpleLineSymbol();
+              line.setStyle(SimpleLineSymbol.STYLE_SHORTDOT);
+              line.setWidth(4);
+              line.setColor(new Color([0, 112, 255, 1]));
+            }else{
+              tiempo = route.attributes.Total_TiempoEnCoche;
+              line = new SimpleLineSymbol();
+              line.setColor(new Color([0, 112, 255, 1]));
+              line.setWidth(4);
+            }
+
+            route.symbol = line;
+            gl.add(route);
+            var t = Math.round(tiempo * 100) / 100
+
+            var tmpEle = document.getElementById("tiempoRuta");
+            var txtTiempo = document.createTextNode("Tiempo total de la ruta: " + t + " minutos");
+            tmpEle.removeChild(tmpEle.firstChild);
+            tmpEle.appendChild(txtTiempo);
+
+            var dist = route.attributes.Total_Meters;
+            var d = Math.round(dist * 100) / 100
+            var distEle = document.getElementById("distRuta");
+            var txtDistancia = document.createTextNode("Tiempo total de la ruta: " + d + " metros");
+            distEle.removeChild(distEle.firstChild);
+            distEle.appendChild(txtDistancia);
+
+         }
+
+         function showDirections(directions){
+          
+          var features = directions.features;
+
+          for (var i = 0; i<features.length; i++){
+              //se añade una simbología a cada entidad
+            features[i].symbol = line;
+            features[i].infoTemplate = new InfoTemplate("Direcciones",features[i].attributes.text);
+
+              //se añade la entidad al mapa
+            gl.add(features[i]);
+
+          }
+         }
+
+         function errorRoute(msg){
+            gl.clear();
+            alert("No se ha podido calcular la ruta usando esas paradas");
+            borrarpuntos();
+         }
+
+        //función que crea los parámetros de modo
+         function calcularModo(modo){
+          var objModo = {};
+
+          var velocidad = document.getElementById("velocidad").value;
+
+          if(modo == 1){
+              objModo = {
+                 "name": "ModoAPie",
+                 "id": "1",
+                 "type": "WALK",
+                 "description": "",
+                 "timeAttributeName": "TiempoAPie",
+                 "distanceAttributeName": "Meters",
+                 "impedanceAttributeName": "TiempoAPie",
+                 "restrictionAttributeNames": ["ExisteAcera"],
+                 "attributeParameterValues": [
+                    {
+                     "attributeName": "Oneway",
+                     "parameterName": "Restriction Usage",
+                     "value": "Prohibited"
+                    },
+                    {
+                     "attributeName": "TiempoAPie",
+                     "parameterName": "VelocidadAPie",
+                     "value": velocidad
+                    },
+                    {
+                     "attributeName": "ExisteAcera",
+                     "parameterName": "Restriction Usage",
+                     "value": "Prohibited"
+                    }
+                 ],
+                 "useHierarchy": true,
+                 "uturnAtJunctions": "esriNFSBAllowBacktrack",
+                 "simplificationTolerance": null,
+                 "simplificationToleranceUnits": "esriUnknownUnits"
+                }
+          }else {
+               objModo = {
+                 "name": "ModoCoche",
+                 "id": "2",
+                 "type": "AUTOMOBILE",
+                 "description": "",
+                 "timeAttributeName": "TiempoEnCoche",
+                 "distanceAttributeName": "Meters",
+                 "impedanceAttributeName": "TiempoEnCoche",
+                 "restrictionAttributeNames": ["Oneway"],
+                 "attributeParameterValues": [
+                  {
+                   "attributeName": "Oneway",
+                   "parameterName": "Restriction Usage",
+                   "value": "Prohibited"
+                  },
+                  {
+                   "attributeName": "TiempoAPie",
+                   "parameterName": "VelocidadAPie",
+                   "value": 5
+                  },
+                  {
+                   "attributeName": "ExisteAcera",
+                   "parameterName": "Restriction Usage",
+                   "value": "Prohibited"
+                  }
+                 ],
+                 "useHierarchy": true,
+                 "uturnAtJunctions": "esriNFSBAllowBacktrack",
+                 "simplificationTolerance": null,
+                 "simplificationToleranceUnits": "esriUnknownUnits"
+                }
+
+          }
+          return objModo;
+
+         }
+
+
+         
+
+      });
+   </script>
+</head>
+
+<body class="claro">
+   <div id="contenedor" data-dojo-type="dijit/layout/BorderContainer">
+      
+      <div id="mapDiv" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="splitter:true, region:'center'">
+         <div id="search"></div>
+         <div id="BasemapToggle"></div>
+         <div id="HomeButton"></div>
+         <div id="scaleBarDiv"></div>
+      </div>
+      <div id="layerListPane" data-dojo-type="dijit/layout/AccordionContainer" data-dojo-props="splitter:true, region:'leading'">
+            <div data-dojo-type="dijit/layout/AccordionPane" title="Lista de Capas">
+               <div id="layerList"></div>
+            </div>
+            <div id="routeUI" data-dojo-type="dijit/layout/AccordionPane" title="Rutas" >
+               <form>
+                  <div>Añadir puntos:</div>
+                  <div class="btn-group" role="group" aria-label="...">
+                     <div class="radio">
+                        <label><input id="on" name="points" type="radio" class="radio" title="On">On</label>
+                     </div>
+                     <div class="radio">
+                        <label><input id="off" name="points" type="radio" class="radio" checked="true" title="Off">Off</label>
+                     </div>
+                  </div>
+                  
+                  <div>Añadir barreras:</div>
+                  <div class="btn-group" role="group" aria-label="...">
+                     <div class="radio">
+                        <label><input id="barriersOn" name="barriers" type="radio" class="radio" title="On">On</label>
+                     </div>
+                     <div class="radio">
+                        <label><input id="barriersOff" name="barriers" type="radio" class="radio" checked="true" title="Off">Off</label>
+                     </div>
+                  </div>
+                  <div>
+                    <button type="button" id="borrarPTS" class="btn btn-success">Borrar puntos</button>
+                    <button type="button" id="borrarBarreras" class="btn btn-danger">Borrar barreras</button>
+                  </div>
+                  <div id="modos">
+                    Modos de ruta
+                    <select id="modosRuta">
+                      <option value="1">A pie</option>
+                      <option value="2">En coche</option>
+                    </select>
+                  </div>
+                  <div id="velocidadform">
+                    Velocidad de viaje
+                    <select id="velocidad">
+                      <option value=4>Lento</option>
+                      <option value=5>Normal</option>
+                      <option value=6>Rápido</option>
+                      <option value=8>Rajoy</option>
+                      <option value=12>Corriendo</option>
+                    </select>
+                  </div>
+               </form>
+               <div>
+                 <div id="tiempoRuta">
+                   Tiempo total de la ruta:   
+                 </div>
+                 <div id="distRuta">
+                   Distancia total de la ruta:   
+                 </div>
+               </div>
+            </div>
+      </div>
+   </div>
+</body>
+
+</html>

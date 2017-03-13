@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.18/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>		
+		var urlfeat = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0";
+
+		require(["esri/map",
+			"esri/symbols/SimpleMarkerSymbol",
+  			"esri/renderers/SimpleRenderer",
+  			"dojo/_base/Color",
+			"esri/layers/FeatureLayer",
+			"dojo/domReady!"], 
+		function(Map, 
+			SimpleMarkerSymbol,
+			SimpleRenderer,
+			Color,
+			FeatureLayer) {
+	    // code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "gray",
+		    	isPanArrows: true
+		  	});
+    		//se crea la FL y se añade al mapa
+		    var featLayer = new FeatureLayer(urlfeat);
+		    //map.addLayer(featLayer);
+
+		    //se crea un símbolo
+		    var symbol = new SimpleMarkerSymbol();
+  			symbol.style = SimpleMarkerSymbol.STYLE_SQUARE;
+  			symbol.setSize(10);
+  			symbol.setColor(new Color([255,0,0,0.5]));
+  			
+  			//se crea un SimpleRenderer con el símbolo antes creado
+  			var renderer = new SimpleRenderer(symbol);
+	  		//featLayer.setRenderer(renderer);
+	  		map.addLayer(featLayer);
+
+	  		//en el evento click del mapa, se aplica el renderer a la featureLayer y se refresca la capa
+	  		map.on("click", function(){
+	  			featLayer.setRenderer(renderer);
+	  			featLayer.refresh();
+	  		});
+
+	  });
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>		
+		var urlfeat = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/2";
+
+		require(["esri/map",
+  			"esri/InfoTemplate",
+      		"esri/symbols/SimpleLineSymbol",
+      		"esri/symbols/SimpleFillSymbol",
+      		"esri/renderers/ClassBreaksRenderer",
+  			"dojo/_base/Color",
+			"esri/layers/FeatureLayer",
+			"dojo/domReady!"], 
+		function(Map, 
+			InfoTemplate,
+			SimpleLineSymbol,
+			SimpleFillSymbol,
+			ClassBreaksRenderer,
+			Color,
+			FeatureLayer) {
+	    // code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "gray",
+		    	isPanArrows: true
+		  	});
+    		var renderer, featureLayer;
+
+    		map.on("load",function(){
+    			//definimos la simbología por defecto
+    			var defaultSymbol = new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
+          		defaultSymbol.outline.setStyle(SimpleLineSymbol.STYLE_NULL);
+
+	        	//construimos el renderer, con el simbolo por defecto y el campo que queremos que sea significativo para aplicar el renderizado
+	        	renderer = new ClassBreaksRenderer(defaultSymbol, "pop2000");
+
+
+	        	var symbol1 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, null, new Color([255,0,0,0.2]));
+	        	var symbol2 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, null, new Color([0,255,0,0.2]));
+	        	var symbol3 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, null, new Color([0,0,255,0.2]));
+	        	var symbol4 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, null, new Color([255,255,0,0.2]));
+	        	var symbol5 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, null, new Color([255,0,255,0.2]));
+	        	var symbol6 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, null, new Color([0,255,255,0.2]));
+	        	//añadimos los símbolos para cada posible class break
+	        	renderer.addBreak(0, 100000, symbol1);
+	        	renderer.addBreak(100001, 1000000, symbol2);
+		        renderer.addBreak(1000001, 5000000, symbol3);
+		        renderer.addBreak(5000001, 10000000, symbol4);
+		        renderer.addBreak(1000001, 15000000, symbol5);
+		        renderer.addBreak(1500001, 10000000000, symbol6);
+
+		        featureLayer = new FeatureLayer(urlfeat, {
+	            	infoTemplate: new InfoTemplate(" ", "${pop2000}"),
+	            	mode: FeatureLayer.MODE_ONDEMAND,
+	            	outFields: ["pop2000"]
+          		});
+
+		    	map.addLayer(featureLayer);
+    		});
+
+	  		
+	  		map.on("click", function(){
+	  			featureLayer.setRenderer(renderer);
+	  			featureLayer.refresh();
+	  		});
+
+	 	});
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title></title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <style>
+      html, body, #map {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.19/"></script>
+    <script>
+      var map;
+
+      require(["esri/map",
+        "esri/geometry/Point",
+        "esri/symbols/SimpleMarkerSymbol",
+        "esri/Color",
+        "esri/graphic", 
+        "esri/layers/GraphicsLayer",
+        "dojo/on",
+        "dojo/domReady!"], 
+		function(Map,
+      Point,
+      SimpleMarkerSymbol,
+      Color,
+      Graphic,
+      GraphicsLayer,
+      on) {
+        	
+      map = new Map("map", {
+      		basemap: "streets",
+  		    zoom: 5
+    	});
+	   map.on("load",function(){
+        map.disableDoubleClickZoom();
+        gl = new GraphicsLayer({ id: "points" });
+        map.addLayer(gl);
+      });
+      
+
+    	var symbol = new SimpleMarkerSymbol("circle", 20, null, new Color([0, 0, 0, 0.75]));
+
+    	 
+    	
+
+    	
+      map.on("layer-add-result", function(change){
+		    alert("ya se han añadido todas las capas al mapa");
+	    });
+      
+      
+
+			map.on("extent-change", function(objeto){
+          //obtener antipodas
+          var level = map.getLevel();
+          map2.centerAndZoom(ptoAntipoda, level)
+			});
+
+      map.on("zoom-end", function(objeto){
+          var level = objeto.level;
+          var center = objeto.extent.getCenter();
+          //obtener antipodas
+
+          //centrar en antipodas y hacer zoom el map2
+          map2.centerAndZoom(center, level) 
+
+
+
+          map2.setLevel(level);
+      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			map.on("click", function(mouseEvent){
+        var p = mouseEvent.mapPoint;
+        map.centerAt(p);
+			});
+		});
+		
+    </script>
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+</html>

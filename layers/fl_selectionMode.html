@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>
+		
+		var urlfeat = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0";
+		
+		require(["esri/map",
+			"esri/layers/FeatureLayer",
+			"esri/tasks/query",
+			"esri/symbols/PictureMarkerSymbol",
+			"dojo/domReady!"], 
+		function(Map, 
+			FeatureLayer,
+			Query,
+			PictureMarkerSymbol) {
+	    // code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "gray",
+		    	isPanArrows: true
+		  	});
+		    
+		    var featLayer = new FeatureLayer(urlfeat,{
+		    	mode: FeatureLayer.MODE_ONDEMAND	    	
+		    });
+
+
+
+		    map.addLayer(featLayer);
+
+		    var myQuery = new Query();
+        	//criterio por atributos
+        	myQuery.where = "pop2000 > 1250000";
+        	//criterio espacial
+			//Atributos de salida
+			myQuery.outFields = ["areaname", "pop2000"];
+			//si queremos que devuelva la geometría
+			myQuery.returnGeometry = true;
+
+			var ptPicSymbol = new PictureMarkerSymbol("https://static.arcgis.com/images/Symbols/Shapes/BluePin1LargeB.png", 50, 50);
+			ptPicSymbol.setOffset(0,25);
+
+			var i = 1;
+			map.on("click",function(){
+				var r = i%2;
+				if(r!=0){
+					featLayer.setSelectionSymbol(ptPicSymbol);
+					featLayer.selectFeatures(myQuery,FeatureLayer.SELECTION_NEW);
+				}else{
+					featLayer.clearSelection();
+				}
+				i++;
+			});
+
+
+	  });
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	    html, body #mapDiv{
+	      height: 97%;
+	      width: 98%;
+	      margin: 1%;
+	    }
+	</style>
+
+	<script>
+		require(["esri/map",
+			"esri/arcgis/utils",
+			"esri/dijit/LayerList",
+			"dojo/domReady!"], 
+		function(Map, arcgisUtils, LayerList) {
+		//identificador del webMap de ArcGIS online que se quiere cargar
+		webmapId = "bd55256ca9344209b8be3546f3091190";
+	    var map;
+	    //creamos el mapa a partir del método createMap de arcgisUtils
+	    //cuando se recibe la respuesta se ejecuta la función anónima ahí definida
+	    defResponse = arcgisUtils.createMap(webmapId, "mapDiv").then(function(response){
+	    	map = response.map;
+	    	//se crea el widget LayerList
+	    		//el mapa se obtiene de la variable response
+	    		//las capas las obtenemos usando el método de getLayerList y como parámetro la respuesta
+	    	var obj = arcgisUtils.getLayerList(response);
+	        var myWidget = new LayerList({
+	           map: response.map,
+	           layers: obj 
+	        },"layerList");
+
+	        //se inicializa el widget
+	        myWidget.startup();
+	    });
+	  });
+	</script>
+	</head>
+	<body class="claro">
+		<div id="content">
+			
+			<div id="layerList"></div>
+			<div id="mapDiv"
+				style="overflow:hidden;">
+			</div>
+		</div>
+  	</body>
+</html>

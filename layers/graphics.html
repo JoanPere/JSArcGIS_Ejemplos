@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>
+		
+		require(["esri/map",
+			"esri/geometry/Point",
+			"esri/geometry/Polyline",
+			"esri/geometry/Polygon",
+			"esri/geometry/Circle",
+			"esri/Color",
+			"esri/symbols/SimpleMarkerSymbol",
+			"esri/symbols/PictureMarkerSymbol",
+			"esri/symbols/SimpleLineSymbol",
+			"esri/symbols/SimpleFillSymbol", 
+        	"esri/graphic", 
+        	"esri/layers/GraphicsLayer",
+        	"esri/geometry",
+			"dojo/domReady!"], 
+		function(
+			Map, 
+			Point,
+			Polyline,
+			Polygon,
+			Circle,
+			Color,
+			SimpleMarkerSymbol,
+			PictureMarkerSymbol,
+			SimpleLineSymbol,
+			SimpleFillSymbol, 
+        	Graphic, 
+        	GraphicsLayer,
+        	geo
+			) {
+
+		    map = new Map("mapDiv", {
+		    	center: [10, 10],
+		    	zoom: 5,
+		    	basemap: "gray",
+		    	isPanArrows: true
+		  	});
+
+		  	sr = map.spatialReference;
+
+		  	//GEOMETRÍAS
+		  	//Punto
+		  	var pt = new Point([10,10], sr);
+		  	
+		  	//Polilínea
+			var polilinea = new Polyline(map.spatialReference);
+		  	polilinea.addPath([new Point(10,10,sr), new Point(20,20,sr),new Point(10,30,sr)]);
+
+		  	//Polígono
+		  	var polygon = new Polygon(map.spatialReference);
+		  	polygon.addRing([new Point(10,10,sr), new Point(20,20,sr),new Point(10,30,sr),new Point(10,10,sr)]);
+
+		    //SIMBOLOGÍA
+		    //SimpleMarkerSymbol
+			var ptSymbol1 = new SimpleMarkerSymbol();
+		    	//tamaño
+			ptSymbol1.setSize(10);
+		    	//estilo
+			ptSymbol1.setStyle(SimpleMarkerSymbol.STYLE_CIRCLE);
+		    //ptSymbol1.setStyle("STYLE_CIRCLE");
+		    //ptSymbol1.setStyle("STYLE_DIAMOND");
+		    //ptSymbol1.setStyle("STYLE_X");
+		    //ptSymbol1.setStyle("STYLE_SQUARE");
+		    	//color
+			ptSymbol1.setColor(new Color("blue"));
+			/*ptSymbol1.setColor(new Color("#C0C0C0"));
+			ptSymbol1.setColor(new Color([255,0,0]));
+			ptSymbol1.setColor(new Color([255,0,0,0]));*/
+
+		    //PictureMarkerSymbol
+			var ptPicSymbol = new PictureMarkerSymbol("http://file01.mundodeportivo.com/2007/11/30/53414740081-escudoEquipo.png", 50, 50);
+
+			//SimpleLineSymbol
+			var lSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOTDOT, new Color("red"), 1);
+
+		    //SimpleFillSymbol
+			fillSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_CROSS, lSymbol, new Color("red"));
+			
+			var gl = new GraphicsLayer();
+			map.addLayer(gl);
+
+		    map.on("click", function(evt){
+		    	//Círculo
+		    	var radius = map.extent.getWidth() / 20;
+		  		var circle = new Circle({
+		  			center: evt.mapPoint,
+		  			radius: radius});
+		  		//var point = evt.mapPoint;
+		    	var graphic = new Graphic(circle, fillSymbol);
+          		//map.graphics.add(graphic);
+          		gl.add(graphic);
+		    });
+	  });
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>

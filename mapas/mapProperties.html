@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+<!--	<script>
+		var dojocConfig = {
+			async = true
+		} 
+	</script>-->
+	<script>
+
+		require(["esri/map",
+			"dojo/domReady!"], 
+		function(Map) {
+	    // code to create the map and add a basemap will go here
+	    map = new Map("mapDiv", {
+	    	center: [-56.049, 38.485],
+	    	zoom: 3,
+	    	basemap: "topo",
+	    	isPanArrows: true
+	  	});
+	    map.setBasemap("terrain");
+	  	//map.attribution.destroy();
+	  	//map.showPanArrows();
+	  });
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>
+		
+		require(["esri/map",
+			"esri/geometry/Circle",
+			"esri/symbols/SimpleFillSymbol", 
+      "esri/graphic", 
+      "esri/layers/GraphicsLayer",
+			"dojo/domReady!"], 
+		function(
+			Map, 
+			Circle,
+			SimpleFillSymbol, 
+        	Graphic, 
+        	GraphicsLayer
+			) {
+		    
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "topo",
+		    	isPanArrows: true
+		  	});
+
+		    //se crea la simbología para el gráfico
+		    var symbol = new SimpleFillSymbol().setColor(null).outline.setColor("blue");
+        	//capa de gráficos dónde se irán añadiendo los círculos
+        	var gl = new GraphicsLayer({ id: "circles" });
+
+        	//añadimos la graphic layer al mapa
+        	map.addLayer(gl);
+
+        	//evento click del mapa
+        	//la variable event es un objeto que contiene todas las propiedades definidas en el API
+        	//sobre lo que nos devuelve el evento click de mapa
+        	map.on("click", function(event) {
+        		//recogemos la propiedad mapPoint que son las coordenadas del punto que hemos pulsado al mapa
+        		var pto = event.mapPoint;
+          		//definimos un radio de esta manera 
+          		var radius = map.extent.getWidth() / 20;
+          		
+          		//creamos la geometría de círculo
+          		var circle = new Circle({
+           			center: e.mapPoint,
+            		radius: radius
+          		});
+          		//creamos un gráfico a partir de la geometría(círculo) y simbología antes definida
+          		var graphic = new Graphic(circle, symbol);
+          		//añadimos el gráfico a la capa de grafic layer antes añadida al mapa
+          		gl.add(graphic);
+        	});
+	  });
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>
+		var map;
+		var urlTiledService = "http://services.arcgisonline.com/arcgis/rest/services/ESRI_StreetMap_World_2D/MapServer";
+		var urlDynamic = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer";
+
+		require(["esri/map",
+			"esri/layers/ArcGISTiledMapServiceLayer",
+			"esri/layers/ArcGISDynamicMapServiceLayer",
+			"esri/layers/FeatureLayer",
+			"dojo/domReady!"], 
+		function(Map, 
+			ArcGISTiledMapServiceLayer,
+			ArcGISDynamicMapServiceLayer,
+			FeatureLayer) {
+	    // code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	//basemap: "oceans",
+		    	isPanArrows: true
+		  	});
+
+		    var tiledLayer = new ArcGISTiledMapServiceLayer("http://services.arcgisonline.com/arcgis/rest/services/ESRI_StreetMap_World_2D/MapServer",
+		    	{
+		    		id:"cacheado"
+				}
+			);
+		    
+		    var dynamLayer = new ArcGISDynamicMapServiceLayer(urlDynamic,{
+		    	id:"dyn",
+		    	opacity:0.7
+		    });
+
+		    map.addLayer(tiledLayer);
+
+		    map.addLayer(dynamLayer);
+
+
+	  });
+	
+
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>

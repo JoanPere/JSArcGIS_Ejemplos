@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.19/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>		
+		var urlfeat = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0";
+
+		require(["esri/map",
+  			"esri/InfoTemplate",
+      		"esri/symbols/SimpleLineSymbol",
+      		"esri/symbols/SimpleFillSymbol",
+      		"esri/renderers/HeatmapRenderer",
+  			"dojo/_base/Color",
+			"esri/layers/FeatureLayer",
+			"dojo/domReady!"], 
+		function(Map, 
+			InfoTemplate,
+			SimpleLineSymbol,
+			SimpleFillSymbol,
+			HeatmapRenderer,
+			Color,
+			FeatureLayer) {
+	    // code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "gray",
+		    	isPanArrows: true
+		  	});
+    		var renderer, featureLayer;
+
+    		map.on("load",function(){
+	        	//construimos el renderer, con el simbolo por defecto y el campo que queremos que sea significativo para aplicar el renderizado
+	        	renderer = new HeatmapRenderer({
+	        		blurRadius: 8,
+	        		field: "pop2000",
+	        		maxPixelIntensity: 1000000,
+	        		minPixelIntensity: 50000
+	        	});
+
+		        featureLayer = new FeatureLayer(urlfeat, {
+	            	infoTemplate: new InfoTemplate(" ", "${pop2000}"),
+	            	mode: FeatureLayer.MODE_ONDEMAND,
+	            	outFields: ["pop2000"]
+          		});
+
+		        featureLayer.setRenderer(renderer);
+		    	map.addLayer(featureLayer);
+    		});
+
+	  });
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>
