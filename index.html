@@ -10,6 +10,7 @@
     <link rel="shortcut icon" href="/master/JSArcGIS_Ejemplos/favicon.ico">
     <!-- get calcite-web css from the cdn (use latest version) -->
     <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-rc.2/css/calcite-web.min.css">
+    <link rel="stylesheet" href="css/main.css">
     <!--[if lt IE 9]>
       <script src="/assets/javascripts/libs/selectivizr.js"></script>
       <script src="/assets/javascripts/libs/html5shiv.js"></script>
@@ -26,7 +27,6 @@
                 <a href="https://developers.arcgis.com/javascript/3/" target="_blank" class="top-nav-title">ArcGIS Api 3.x de JS</a>
                 <!-- primary navigation sections -->
                 <nav class="top-nav-list" role="navigation" aria-labelledby="topnav">
-                    <a class="top-nav-link" href="#">Menú</a>
                     <a class="top-nav-link" href="http://esri-es.github.io/JavascriptAPI/" target="_blank">Más ejemplos</a>
                     <a class="top-nav-link" href="http://www.geodevelopers.org/" target="_blank">GeoDevelopers</a>
                 </nav>
@@ -50,12 +50,12 @@
                 <aside class="side-nav" aria-role="complementary">
                     <h4 class="side-nav-title">Sidenav Group</h4>
                     <nav role="navigation" aria-labelledby="sidenav">
-                        <a href="#" class="side-nav-link">Mapa</a>
-                        <a href="#" class="side-nav-link">Layers</a>
-                        <a href="#" class="side-nav-link">Widgets</a>
-                        <a href="#" class="side-nav-link">Query</a>
-                        <a href="#" class="side-nav-link">Renderers</a>
-                        <a href="#" class="side-nav-link">Geoprocessors</a>
+                        <a href="#mapa" class="side-nav-link">Mapa</a>
+                        <a href="#layers" class="side-nav-link">Layers</a>
+                        <a href="#widgets" class="side-nav-link">Widgets</a>
+                        <a href="#query" class="side-nav-link">Query</a>
+                        <a href="#renderers" class="side-nav-link">Renderers</a>
+                        <a href="#geoprocessor" class="side-nav-link">Geoprocessors</a>
                     </nav>
                 </aside>
 
@@ -64,18 +64,38 @@
             <!-- main content list -->
             <div class="column-19 pre-1">
             <!-- cards ??? -->
-                <div>
-                    <h3>MAPA</h3>
+                <div class="h-seccion">
+                    <a name="mapa"></a><h3>MAPA</h3>
                 </div>  
                 <div class="block-group block-group-4-up">
                     <div class="card block">
                         <figure class="card-image-wrap">
-                            <img class="card-image" src="img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
+                            <img class="card-image" src="img/appthumbnail_2d.jpg" alt="miniatura app">
                         </figure>
                         <div class="card-content">
                             <h4><a href="mapas/mapaSimple.html" target="_blank">Mapa Simple</a></h4>
                             <p class="font-size--1">Aplicación que crea un mapa simple.</p>
-                            <a href=""></a>
+                            <a class="btn-codigo" href="https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapaSimple.html" target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
+                        </div>
+                    </div>
+                    <div class="card block">
+                        <figure class="card-image-wrap">
+                            <img class="card-image" src="img/appthumbnail_2d.jpg" alt="miniatura propiedades del mapa">
+                        </figure>
+                        <div class="card-content">
+                            <h4><a href="mapas/mapProperties.html">Propiedades del Mapa</a></h4>
+                            <p class="font-size--1">Aplicación en la que se modifican algunas de las propiedades del mapa.</p>
+                            <a class="btn-codigo" href="https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapProperties.html" target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
+                        </div>
+                    </div>
+                    <div class="card block">
+                        <figure class="card-image-wrap">
+                            <img class="card-image" src="img/appthumbnail_2d.jpg" alt="miniatura eventos del mapa">
+                        </figure>
+                        <div class="card-content">
+                            <h4><a href="mapas/mapEvents.html">Eventos del Mapa</a></h4>
+                            <p class="font-size--1">En esta aplicación se capturan algunos de los eventos del mapa.</p>
+                            <a class="btn-codigo" href="https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapEvents.html" target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
                         </div>
                     </div>
                     <div class="card block">
@@ -83,31 +103,14 @@
                             <img class="card-image" src="img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
                         </figure>
                         <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
+                            <h4><a href="mapa/mapaWebMaps.html">Mapa de un WebMap</a></h4>
+                            <p class="font-size--1">Crea un mapa a partir de un WebMap de ArcGIS Online</p>
+                            <a class="btn-codigo" href="https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapaWebMaps.html" target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h3>LAYERS</h3>
+                <div class="h-seccion">
+                    <a name="layers"></a><h3>LAYERS</h3>     
                 </div>
                 <div class="block-group block-group-4-up">
                     <div class="card block">
@@ -147,8 +150,8 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h3>WIDGETS</h3>
+                <div class="h-seccion">
+                    <a name="widgets"></a><h3>WIDGETS</h3>
                 </div>
                 <div class="block-group block-group-4-up">
                     <div class="card block">
@@ -188,8 +191,8 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h3>QUERYS</h3>
+                <div class="h-seccion">
+                    <a name="querys"></a><h3>QUERYS</h3>
                 </div>
                 <div class="block-group block-group-4-up">
                     <div class="card block">
@@ -229,8 +232,8 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h3>RENDERERS</h3>
+                <div class="h-seccion">
+                    <a name="renderers"></a><h3>RENDERERS</h3>
                 </div>
                 <div class="block-group block-group-4-up">
                     <div class="card block">
@@ -270,8 +273,8 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h3>GEOPROCESSOR</h3>
+                <div class="h-seccion">
+                    <a name="geoprocessor"></a><h3>GEOPROCESSOR</h3>
                 </div>
                 <div class="block-group block-group-4-up">
                     <div class="card block">

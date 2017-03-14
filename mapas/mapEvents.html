@@ -3,8 +3,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
-    <title></title>
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <title>Map Events</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/dijit/calcite.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/esri/esri.css">
     <style>
       html, body, #map {
         height: 100%;
@@ -12,7 +13,7 @@
         padding: 0;
       }
     </style>
-    <script src="https://js.arcgis.com/3.19/"></script>
+    <script src="https://js.arcgis.com/3.20/"></script>
     <script>
       var map;
 
@@ -36,72 +37,36 @@
       		basemap: "streets",
   		    zoom: 5
     	});
-	   map.on("load",function(){
-        map.disableDoubleClickZoom();
-        gl = new GraphicsLayer({ id: "points" });
-        map.addLayer(gl);
-      });
-      
 
     	var symbol = new SimpleMarkerSymbol("circle", 20, null, new Color([0, 0, 0, 0.75]));
 
-    	 
-    	
+      var gl = new GraphicsLayer({ id: "points" });
 
-    	
+      map.addLayer(gl);
+
       map.on("layer-add-result", function(change){
-		    alert("ya se han añadido todas las capas al mapa");
-	    });
-      
-      
+            alert("ya se han añadido todas las capas al mapa");
+         });
 
-			map.on("extent-change", function(objeto){
-          //obtener antipodas
-          var level = map.getLevel();
-          map2.centerAndZoom(ptoAntipoda, level)
-			});
-
-      map.on("zoom-end", function(objeto){
-          var level = objeto.level;
-          var center = objeto.extent.getCenter();
-          //obtener antipodas
-
-          //centrar en antipodas y hacer zoom el map2
-          map2.centerAndZoom(center, level) 
-
-
-
-          map2.setLevel(level);
+      map.on("zoom-end", function(evt){
+        alert("el ZOOM ha cambiado");
+        alert("factor de Zoom" + evt.level);
+        alert("nuevo Xmax, Ymax:" + evt.extent.xmax + ", " + evt.extent.ymax);
       });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			map.on("click", function(mouseEvent){
+      map.on("click", function(mouseEvent){
+        alert("hemos hecho click en el mapa");
         var p = mouseEvent.mapPoint;
-        map.centerAt(p);
-			});
+        graphic = new Graphic(p,symbol);
+        gl.add(graphic);
+      });
+
 		});
 		
     </script>
   </head>
 
-  <body>
+  <body class="calcite">
     <div id="map"></div>
   </body>
 </html>

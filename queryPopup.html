@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>queryPopup</title>
+
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+	    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.20/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+
+	<script>
+		var map;
+		var urlDynamic = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer";
+		var urlCities = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0";
+
+		require(["esri/map",
+			"esri/geometry/Circle",
+			"esri/layers/ArcGISDynamicMapServiceLayer",
+			"esri/tasks/query",
+			"esri/tasks/QueryTask",
+			"esri/geometry/Polygon",
+			"esri/symbols/PictureMarkerSymbol",
+			"esri/symbols/SimpleFillSymbol", 
+      		"esri/graphic",
+      		"esri/layers/GraphicsLayer",
+      		"esri/Color",
+      		"esri/layers/FeatureLayer",
+      		"esri/renderers/SimpleRenderer",
+      		"esri/InfoTemplate",
+      		"esri/dijit/Popup",
+      		"dojo/dom-construct",
+			"dojo/domReady!"], 
+
+
+		function(Map, Circle, ArcGISDynamicMapServiceLayer, Query, QueryTask, Polygon, PictureMarkerSymbol, SimpleFillSymbol, Graphic, GraphicsLayer, Color, FeatureLayer, SimpleRenderer, InfoTemplate, Popup, domConstruct) {
+		    
+			
+			function getBtn(){
+				btn = document.createElement("button");
+				btn.className = "btn btn-primary";
+				btn.onclick = function(){
+					map.infoWindow.hide();
+				}
+				return btn.outterHTML;
+			}
+			
+
+			var popup = new Popup({
+				anchor:"auto",
+				highlight: false,
+				titleInBody: false
+			}, domConstruct.create("div")
+			);
+
+
+		    // code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "topo",
+		    	infoWindow: popup
+		  	});
+
+
+		    var dynamLayer = new ArcGISDynamicMapServiceLayer(urlDynamic,{id:"usa",opacity:0.5});
+        	map.addLayer(dynamLayer);
+
+        	
+
+        	var graphicLayer = new GraphicsLayer();
+        	map.addLayer(graphicLayer);
+
+        	map.setInfoWindowOnClick(false);
+
+        	//symbol selected
+        	var selectedSymb = new PictureMarkerSymbol();
+			selectedSymb.setOffset(0, 20);
+			selectedSymb.setHeight(40);
+			selectedSymb.setWidth(40);
+			selectedSymb.setUrl("http://img3.wikia.nocookie.net/__cb20140427224234/caramelangel714/images/7/72/Location_Icon.png");
+
+			var ptPicSymbol = new PictureMarkerSymbol("https://static.arcgis.com/images/Symbols/Shapes/BluePin1LargeB.png", 50, 50);
+			ptPicSymbol.setOffset(0,25);
+
+        	
+	        map.on("load", function(){
+	        	map.graphics.on("mouse-over", function(event){
+	        		gr = event.graphic;
+	        		gr.setSymbol(selectedSymb);
+	        		map.infoWindow.setTitle(gr.getTitle());
+	        		map.infoWindow.setContent(gr.getContent());
+	        		//map.infoWindow.setContent(contenedor);
+
+	        		map.infoWindow.show(gr.geometry);
+	        	});
+	        	map.graphics.on("mouse-out", function(event){
+	        		event.graphic.setSymbol(ptPicSymbol);
+	        		
+	        	});
+	        });
+
+
+
+        	//InfoTemplate of the results:
+        	var infoTemplate = new InfoTemplate("${areaname}","Población: ${pop2000}"+"</br>"+getBtn());
+        	
+        	//infoTemplate.setContent();
+        	
+        	//QUERY
+        	//constructor
+        	var myQuery = new Query();
+        	//criterio por atributos
+        	myQuery.where = "pop2000 > 300000";
+ 			
+			//Atributos de salida
+			myQuery.outFields = ["areaname", "pop2000"];
+			//myQuery.outFields = ["*"];
+			//si queremos que devuelva la geometría
+			myQuery.returnGeometry = true;
+			myQuery.outSpatialReference = map.spatialReference;
+			var route;
+			
+
+			//QUERYTASK
+				//Creamos la queryTask
+			var myQueryTask = new QueryTask(urlCities);
+
+			map.on("click",function(evt){
+				//criterio espacial
+        			//creo una geometria
+        		var circle = new Circle({
+           			center: evt.mapPoint,
+            		radius: 1000000
+          		});
+        			//añado la geometría a la query
+				myQuery.geometry = circle;
+					//aplico el criterio espacial		
+				myQuery.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
+				
+				var symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, null, new Color([255,0,0,0.2]));
+        		var gr = new Graphic(circle, symbol);
+        		
+        		graphicLayer.clear();
+        		graphicLayer.add(gr);
+				
+
+        		
+        		var renderer = new SimpleRenderer(ptPicSymbol);
+        		map.graphics.setRenderer(renderer);
+				
+				//ejecutamos la query y cuando finalize la consulta lanzamos la función show
+				myQueryTask.execute(myQuery,show);
+
+			});
+
+			function show(fsResult){
+				var features = fsResult.features;
+				map.graphics.clear();
+				if(features.length!=0){
+
+					graphicLayer.enableMouseEvents();
+
+					for (var i = 0; i<features.length; i++){
+						features[i].setInfoTemplate(infoTemplate);
+						map.graphics.add(features[i]);
+					}
+				} else {
+					alert("no se ha encontrado ninguna entidad que cumpla las condiciones");
+				}
+			};
+	  	});
+	</script>
+	</head>
+	<body class="claro">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>
