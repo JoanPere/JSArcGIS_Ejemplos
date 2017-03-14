@@ -11,9 +11,15 @@
 
 	<style>
 	    html, body #mapDiv{
-	      height: 97%;
-	      width: 98%;
-	      margin: 1%;
+	      height: 100%;
+	      width: 100%;
+	      
+	    }
+	    #layerList{
+	    	position: relative;
+	    	width:25%;
+	    	top: 1rem;
+	    	padding: 1rem;
 	    }
 	</style>
 
@@ -24,7 +30,7 @@
 			"dojo/domReady!"], 
 		function(Map, arcgisUtils, LayerList) {
 		//identificador del webMap de ArcGIS online que se quiere cargar
-		webmapId = "bd55256ca9344209b8be3546f3091190";
+		webmapId = "49ccb48cb57f4711acd167e57004fd38";
 	    var map;
 	    //creamos el mapa a partir del método createMap de arcgisUtils
 	    //cuando se recibe la respuesta se ejecuta la función anónima ahí definida
