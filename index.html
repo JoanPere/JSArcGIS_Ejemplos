@@ -11,6 +11,13 @@
     <!-- get calcite-web css from the cdn (use latest version) -->
     <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-rc.2/css/calcite-web.min.css">
     <link rel="stylesheet" href="css/main.css">
+
+
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <link href="//www.jsviews.com/samples/samples.css" rel="stylesheet"/>
+    <script src="https://www.jsviews.com/download/jsrender.js"></script>
+
+
     <!--[if lt IE 9]>
       <script src="/assets/javascripts/libs/selectivizr.js"></script>
       <script src="/assets/javascripts/libs/html5shiv.js"></script>
@@ -63,98 +70,144 @@
 
             <!-- main content list -->
             <div class="column-19 pre-1">
-            <!-- cards ??? -->
+
+            
+
+
+
+
+
+
+
+
+                
                 <div class="h-seccion">
                     <a name="mapa"></a><h3>MAPA</h3>
                 </div>  
-                <div class="block-group block-group-4-up">
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="img/appthumbnail_2d.jpg" alt="miniatura app">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="mapas/mapaSimple.html" target="_blank">Mapa Simple</a></h4>
-                            <p class="font-size--1">Aplicación que crea un mapa simple.</p>
-                            <a class="btn-codigo" href="https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapaSimple.html" target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="img/appthumbnail_2d.jpg" alt="miniatura propiedades del mapa">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="mapas/mapProperties.html" target="_blank">Propiedades del Mapa</a></h4>
-                            <p class="font-size--1">Aplicación en la que se modifican algunas de las propiedades del mapa.</p>
-                            <a class="btn-codigo" href="https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapProperties.html" target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="img/appthumbnail_2d.jpg" alt="miniatura eventos del mapa">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="mapas/mapEvents.html" target="_blank">Eventos del Mapa</a></h4>
-                            <p class="font-size--1">En esta aplicación se capturan algunos de los eventos del mapa.</p>
-                            <a class="btn-codigo" href="https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapEvents.html" target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="mapas/mapaWebMaps.html" target="_blank">Mapa de un WebMap</a></h4>
-                            <p class="font-size--1">Crea un mapa a partir de un WebMap de ArcGIS Online</p>
-                            <a class="btn-codigo" href="https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapaWebMaps.html" target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
-                        </div>
-                    </div>
+                <div id="resultMapa" class="block-group block-group-4-up">
                 </div>
+
                 <div class="h-seccion">
-                    <a name="layers"></a><h3>LAYERS</h3>     
-                </div>
-                <div class="block-group block-group-4-up">
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
+                    <a name="layers"></a><h3>LAYERS</h3>
+                </div>  
+                    <div>
+                        <div id="resultLayers" class="block-group block-group-4-up">
                     </div>
                 </div>
+                
+            <script id="theTmpl" type="text/x-jsrender">
+                <div class="card block" style= "margin-bottom: 1rem;">
+                        <figure class="card-image-wrap">
+                            <img class="card-image" src={{:miniatura}} alt={{:alt}}>
+                        </figure>
+                        <div class="card-content">
+                            <h4><a href={{:linkWeb}} target="_blank">{{:tittle}}</a></h4>
+                            <p class="font-size--1">{{:description}}</p>
+                            <a class="btn-codigo" href={{:linkCode}} target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
+                        </div>
+                    </div>
+
+
+                </script>
+
+                <script>
+                var dataMapa = [
+                  {
+                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "linkWeb": "mapas/mapaSimple.html",
+                    "alt":"miniatura app",
+                    "tittle": "Mapa Simple",
+                    "description":"Aplicación que crea un mapa simple.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapaSimple.html"
+                  },
+                  {
+                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "linkWeb": "mapas/mapProperties.html",
+                    "alt":"miniatura app",
+                    "tittle": "Propiedades del Mapa",
+                    "description":"Aplicación en la que se modifican algunas de las propiedades del mapa.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapProperties.html"
+                  },
+                  {
+                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "linkWeb": "mapas/mapEvents.html",
+                    "alt":"miniatura app",
+                    "tittle": "Eventos del Mapa",
+                    "description":"En esta aplicación se capturan algunos de los eventos del mapa.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapEvents.html"
+                  },
+                  {
+                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "linkWeb": "mapas/mapaWebMaps.html",
+                    "alt":"miniatura app",
+                    "tittle": "Mapa de un WebMap",
+                    "description":"Crea un mapa a partir de un WebMap de ArcGIS Online.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapaWebMaps.html"
+                  }
+                ];
+
+
+                 var dataLayers = [
+                  {
+                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "linkWeb": "layers/dynamicTiledLayer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Tiled y Dynamic Layer",
+                    "description":"Aplicación que carga una capa cacheada y una dinámica.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/dynamicTiledLayer.html"
+                  },
+                  {
+                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "linkWeb": "layers/featureLayer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Feature Layers",
+                    "description":"Aplicación que carga en el mapa varias feature layers.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/featureLayer.html"
+                  },
+                  {
+                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "linkWeb": "layers/fl_selectionMode.html",
+                    "alt":"miniatura app",
+                    "tittle": "FL en selection mode",
+                    "description":"Aplicación que carga una feature layer en modo selección.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/fl_selectionMode.html"
+                  },
+                  {
+                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "linkWeb": "layers/graphics.html",
+                    "alt":"miniatura app",
+                    "tittle": "Geometrías, Símbolos y Gráficos",
+                    "description":"Aplicación en la que se crean varias geometrías, sus respectivos símbolos y gráficos.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/graphics.html"
+                  },
+                  {
+                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "linkWeb": "layers/graphicsLayer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Graphic Layer",
+                    "description":"Aplicación con una capa de gráficos en el mapa.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/graphicsLayer.html"
+                  }
+                ];
+
+                var template = $.templates("#theTmpl");
+
+                var htmlOutputMapa = template.render(dataMapa);
+                var htmlOutputLayers = template.render(dataLayers);
+
+                $("#resultMapa").html(htmlOutputMapa);
+                $("#resultLayers").html(htmlOutputLayers);
+
+            </script>
+
+
+
+                
                 <div class="h-seccion">
                     <a name="widgets"></a><h3>WIDGETS</h3>
                 </div>
                 <div class="block-group block-group-4-up">
-                    <div class="card block">
+                    <div class="card block" >
                         <figure class="card-image-wrap">
                             <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
                         </figure>

@@ -5,8 +5,9 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <title></title>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
-	<script src="https://js.arcgis.com/3.19/"></script>
+	<link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/dijit/calcite.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/esri/esri.css">
+	<script src="https://js.arcgis.com/3.20/"></script>
 
 	<style>
 	html, body, #mapDiv {
@@ -16,7 +17,6 @@
 	</style>
 	
 	<script>
-		var urlTiledService = "http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer";
 		
 		var urlfeat = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0";
 		var urlfeat1 = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/1";
@@ -43,28 +43,21 @@
 		    	mode: FeatureLayer.MODE_ONDEMAND,
 		    	opacity: 0.5
 		    });
-		    //var featLayer1 = new FeatureLayer(urlfeat1);
-		    /*var featLayer2 = new FeatureLayer(urlfeat2,
+		    var featLayer1 = new FeatureLayer(urlfeat1);
+		    var featLayer2 = new FeatureLayer(urlfeat2,
 		    	{
-		    		maxAllowableOffset: 1000000
-		    	});
-		    ,
-		    	{
-		    		//maxAllowableOffset: 5000,
+		    		maxAllowableOffset: 5000,
 		    		autoGeneralize: false
-		    	});*/
+		    	});
 
-		    //map.addLayer(tiledLayer);
 		    
 
-		    //map.addLayer(featLayer3);
-			//map.addLayer(featLayer2);
-		    //map.addLayer(featLayer1);
-		    map.addLayer(featLayer0);
+		    map.addLayers([featLayer2,featLayer1,featLayer0]);
+
 	  });
 	</script>
 	</head>
-	<body class="claro">
+	<body class="calcite">
   		<div id="mapDiv"></div>
   	</body>
 </html>
