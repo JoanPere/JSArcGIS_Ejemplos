@@ -95,13 +95,30 @@
                     </div>
                 </div>
                 
+                <div class="h-seccion">
+                    <a name="widgets"></a><h3>WIDGETS</h3>
+                </div>  
+                    <div>
+                        <div id="resultWidgets" class="block-group block-group-4-up">
+                    </div>
+                </div>
+
+                <div class="h-seccion">
+                    <a name="query"></a><h3>QUERYS</h3>
+                </div>  
+                    <div>
+                        <div id="resultQuerys" class="block-group block-group-4-up">
+                    </div>
+                </div>
+
+
             <script id="theTmpl" type="text/x-jsrender">
                 <div class="card block" style= "margin-bottom: 1rem;">
                         <figure class="card-image-wrap">
                             <img class="card-image" src={{:miniatura}} alt={{:alt}}>
                         </figure>
                         <div class="card-content">
-                            <h4><a href={{:linkWeb}} target="_blank">{{:tittle}}</a></h4>
+                            <center><h4><a href={{:linkWeb}} target="_blank">{{:tittle}}</a></h4></center>
                             <p class="font-size--1">{{:description}}</p>
                             <a class="btn-codigo" href={{:linkCode}} target="_blank"><button class="btn btn-small btn-fill"><i class="icon-ui-link-external icon-ui-white icon-ui-flush"> </i>Ver código</button></a>
                         </div>
@@ -113,7 +130,7 @@
                 <script>
                 var dataMapa = [
                   {
-                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "miniatura": "img/mapaSimple.png",
                     "linkWeb": "mapas/mapaSimple.html",
                     "alt":"miniatura app",
                     "tittle": "Mapa Simple",
@@ -121,7 +138,7 @@
                     "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapaSimple.html"
                   },
                   {
-                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "miniatura": "img/mapProperties.png",
                     "linkWeb": "mapas/mapProperties.html",
                     "alt":"miniatura app",
                     "tittle": "Propiedades del Mapa",
@@ -129,7 +146,7 @@
                     "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapProperties.html"
                   },
                   {
-                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "miniatura": "img/mapEvents.png",
                     "linkWeb": "mapas/mapEvents.html",
                     "alt":"miniatura app",
                     "tittle": "Eventos del Mapa",
@@ -137,7 +154,7 @@
                     "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/mapas/mapEvents.html"
                   },
                   {
-                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "miniatura": "img/mapaWebMap.png",
                     "linkWeb": "mapas/mapaWebMaps.html",
                     "alt":"miniatura app",
                     "tittle": "Mapa de un WebMap",
@@ -149,7 +166,7 @@
 
                  var dataLayers = [
                   {
-                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "miniatura": "img/dynamicTiledLayer.png",
                     "linkWeb": "layers/dynamicTiledLayer.html",
                     "alt":"miniatura app",
                     "tittle": "Tiled y Dynamic Layer",
@@ -157,7 +174,7 @@
                     "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/dynamicTiledLayer.html"
                   },
                   {
-                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "miniatura": "img/featLayer.png",
                     "linkWeb": "layers/featureLayer.html",
                     "alt":"miniatura app",
                     "tittle": "Feature Layers",
@@ -165,7 +182,7 @@
                     "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/featureLayer.html"
                   },
                   {
-                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "miniatura": "img/fl_selectionMode.png",
                     "linkWeb": "layers/fl_selectionMode.html",
                     "alt":"miniatura app",
                     "tittle": "FL en selection mode",
@@ -173,7 +190,7 @@
                     "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/fl_selectionMode.html"
                   },
                   {
-                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "miniatura": "img/graphics.png",
                     "linkWeb": "layers/graphics.html",
                     "alt":"miniatura app",
                     "tittle": "Geometrías, Símbolos y Gráficos",
@@ -181,7 +198,77 @@
                     "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/graphics.html"
                   },
                   {
-                    "miniatura": "img/appthumbnail_2d.jpg",
+                    "miniatura": "img/graphicsLayer.png",
+                    "linkWeb": "layers/graphicsLayer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Graphic Layer",
+                    "description":"Aplicación con una capa de gráficos en el mapa.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/graphicsLayer.html"
+                  }
+                ];
+
+                var dataWidgets = [
+                  {
+                    "miniatura": "img/baseMapGallery.png",
+                    "linkWeb": "widgets/basMapGallery.html",
+                    "alt":"miniatura app",
+                    "tittle": "Widget BaseMap Gallery",
+                    "description":"Aplicación que usa el widget de Basemap Gallery.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/widgets/basMapGallery.html"
+                  },
+                  {
+                    "miniatura": "img/baseMapToggle.png",
+                    "linkWeb": "widgets/baseMapToggle.html",
+                    "alt":"miniatura app",
+                    "tittle": "Widget BaseMap Toggle",
+                    "description":"Aplicación que usa el widget de Basemap Toggle.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/widgets/baseMapToggle.html"
+                  },
+                  {
+                    "miniatura": "img/layerList.png",
+                    "linkWeb": "widgets/layerList.html",
+                    "alt":"miniatura app",
+                    "tittle": "FL en selection mode",
+                    "description":"Aplicación que carga una feature layer en modo selección.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/widgets/layerList.html"
+                  }
+                ];
+
+                 var dataQuerys = [
+                  {
+                    "miniatura": "img/query.png",
+                    "linkWeb": "querys/query.html",
+                    "alt":"miniatura app",
+                    "tittle": "Query y QueryTask",
+                    "description":"Aplicación que carga realiza una quiery a una capa de un servicio.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/querys/query.html"
+                  },
+                  {
+                    "miniatura": "img/featLayer.png",
+                    "linkWeb": "layers/featureLayer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Feature Layers",
+                    "description":"Aplicación que carga en el mapa varias feature layers.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/featureLayer.html"
+                  },
+                  {
+                    "miniatura": "img/fl_selectionMode.png",
+                    "linkWeb": "layers/fl_selectionMode.html",
+                    "alt":"miniatura app",
+                    "tittle": "FL en selection mode",
+                    "description":"Aplicación que carga una feature layer en modo selección.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/fl_selectionMode.html"
+                  },
+                  {
+                    "miniatura": "img/graphics.png",
+                    "linkWeb": "layers/graphics.html",
+                    "alt":"miniatura app",
+                    "tittle": "Geometrías, Símbolos y Gráficos",
+                    "description":"Aplicación en la que se crean varias geometrías, sus respectivos símbolos y gráficos.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/layers/graphics.html"
+                  },
+                  {
+                    "miniatura": "img/graphicsLayer.png",
                     "linkWeb": "layers/graphicsLayer.html",
                     "alt":"miniatura app",
                     "tittle": "Graphic Layer",
@@ -194,97 +281,22 @@
 
                 var htmlOutputMapa = template.render(dataMapa);
                 var htmlOutputLayers = template.render(dataLayers);
+                var htmlOutputWidgets = template.render(dataWidgets);
+                var htmlOutputQuerys = template.render(dataQuerys);
+
 
                 $("#resultMapa").html(htmlOutputMapa);
                 $("#resultLayers").html(htmlOutputLayers);
+                $("#resultWidgets").html(htmlOutputWidgets);
+                $("#resultQuerys").html(htmlOutputQuerys);
 
             </script>
 
 
 
                 
-                <div class="h-seccion">
-                    <a name="widgets"></a><h3>WIDGETS</h3>
-                </div>
-                <div class="block-group block-group-4-up">
-                    <div class="card block" >
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="h-seccion">
-                    <a name="querys"></a><h3>QUERYS</h3>
-                </div>
-                <div class="block-group block-group-4-up">
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="/mapas/mapaSimple.html" target="_blank">Mapa Simple</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                </div>
+                
+               
                 <div class="h-seccion">
                     <a name="renderers"></a><h3>RENDERERS</h3>
                 </div>

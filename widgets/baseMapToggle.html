@@ -3,9 +3,10 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title></title>
-  	<link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+    <title>Widget Basemap Toggle</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/dijit/calcite.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/esri/esri.css">
+	<script src="https://js.arcgis.com/3.20/"></script>
     
 
 	
@@ -22,7 +23,6 @@
     }
 	</style>
 
-	<script src="https://js.arcgis.com/3.19/"></script>
 	<script>
 		var map;
 		require(["esri/map",
@@ -48,7 +48,7 @@
 
 	</script>
 	</head>
-	<body>
+	<body class="calcite">
   		<div id="map" class="map">
     		<div id="BasemapToggle"></div>
   		</div>

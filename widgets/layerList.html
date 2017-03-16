@@ -5,15 +5,14 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <title></title>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
-	<script src="https://js.arcgis.com/3.19/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
+	<script src="https://js.arcgis.com/3.20/"></script>
 
 	<style>
-	    html, body #mapDiv{
-	      height: 97%;
-	      width: 98%;
-	      margin: 1%;
+	    html, body, #mapDiv{
+	      height: 100%;
+	      width: 100%;
 	    }	
 	</style>
 
@@ -30,7 +29,7 @@
 			//webmapId = "c28103b6cc3547aeb63c3fe4c7184592";
 	    //webmapId = "f9d0cdeca71749048a4ebf433ac520dd";
 	    webmapId = "7d987ba67f4640f0869acb82ba064228";
-	    	arcgisUtils.createMap(webmapId, "mapDiv");
+	    	
 	    	defResponse = arcgisUtils.createMap(webmapId, "mapDiv").then(function(response){
 	        var myWidget = new LayerList({
 	           map: response.map,
@@ -39,19 +38,6 @@
 	        myWidget.startup();
 	    });
 
-	    /*var map;
-	    defResponse.then(function (response){
-	    	map = response.map;
-	    }, function (error){
-	    	deferred.cancel();
-	    })*/
-
-	   // map.showZoomSlider();
-	    /*map = new Map("mapDiv", {
-	    	center: [-56.049, 38.485],
-	    	zoom: 3,
-	    	basemap: "osm"
-	  	});*/
 	  });
 	</script>
 	</head>

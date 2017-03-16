@@ -6,21 +6,26 @@
     <title></title>
 
 	<link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/dijit/calcite.css">
-	<link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/esri/esri.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
 	<script src="https://js.arcgis.com/3.20/"></script>
 
 	<style>
-	    html, body #mapDiv{
+	    html, body, #mapDiv{
 	      height: 100%;
 	      width: 100%;
 	      
 	    }
 	    #layerList{
-	    	position: relative;
-	    	width:25%;
+	    	position: absolute;
+	    	margin: 10px;
 	    	top: 1rem;
+	    	right: 1rem;
 	    	padding: 1rem;
+	    	background: rgba(255, 255, 255, 0.82);
 	    }
+	    	
+	    
+
 	</style>
 
 	<script>
@@ -52,12 +57,15 @@
 	</script>
 	</head>
 	<body class="calcite">
-		<div id="content">
+		
 			
-			<div id="layerList"></div>
-			<div id="mapDiv"
-				style="overflow:hidden;">
+			
+			<div id="mapDiv" style="overflow:hidden;">
+				
 			</div>
-		</div>
+			<div id="cont">
+				<div id="layerList"></div>
+			</div>
+			
   	</body>
 </html>
