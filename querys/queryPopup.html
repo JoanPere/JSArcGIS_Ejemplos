@@ -18,8 +18,8 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 
-
-    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/dijit/calcite.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/esri/esri.css">
 	<script src="https://js.arcgis.com/3.20/"></script>
 
 	<style>
@@ -59,10 +59,11 @@
 			function getBtn(){
 				btn = document.createElement("button");
 				btn.className = "btn btn-primary";
+				btn.innerHTML="A button";
 				btn.onclick = function(){
 					map.infoWindow.hide();
 				}
-				return btn.outterHTML;
+				return btn.outerHTML;
 			}
 			
 
@@ -78,7 +79,7 @@
 		    map = new Map("mapDiv", {
 		    	center: [-56.049, 38.485],
 		    	zoom: 3,
-		    	basemap: "topo",
+		    	basemap: "national-geographic",
 		    	infoWindow: popup
 		  	});
 
@@ -98,10 +99,10 @@
 			selectedSymb.setOffset(0, 20);
 			selectedSymb.setHeight(40);
 			selectedSymb.setWidth(40);
-			selectedSymb.setUrl("http://img3.wikia.nocookie.net/__cb20140427224234/caramelangel714/images/7/72/Location_Icon.png");
+			selectedSymb.setUrl("https://static.arcgis.com/images/Symbols/Shapes/RedPin1LargeB.png");
 
-			var ptPicSymbol = new PictureMarkerSymbol("https://static.arcgis.com/images/Symbols/Shapes/BluePin1LargeB.png", 50, 50);
-			ptPicSymbol.setOffset(0,25);
+			var ptPicSymbol = new PictureMarkerSymbol("https://static.arcgis.com/images/Symbols/Shapes/BluePin1LargeB.png", 40, 40);
+			ptPicSymbol.setOffset(0,20);
 
         	
 	        map.on("load", function(){
@@ -192,7 +193,7 @@
 	  	});
 	</script>
 	</head>
-	<body class="claro">
+	<body class="calcite">
   		<div id="mapDiv"></div>
   	</body>
 </html>
