@@ -6,3 +6,12 @@
 	margin-top: 0.5rem;
 }
 
+.card-content .btn{
+	position: absolute;
+	width: 87%;
+	bottom: .75rem;
+}
+
+.card-content{
+	margin-bottom: 1.25rem;
+}
