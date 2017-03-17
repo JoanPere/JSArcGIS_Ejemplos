@@ -55,14 +55,14 @@
             <!-- side navigation -->
             <div class="column-4">
                 <aside class="side-nav" aria-role="complementary">
-                    <h4 class="side-nav-title">Sidenav Group</h4>
+                    <h4 class="side-nav-title">API 3.x de JS</h4>
                     <nav role="navigation" aria-labelledby="sidenav">
                         <a href="#mapa" class="side-nav-link">Mapa</a>
                         <a href="#layers" class="side-nav-link">Layers</a>
                         <a href="#widgets" class="side-nav-link">Widgets</a>
                         <a href="#query" class="side-nav-link">Query</a>
                         <a href="#renderers" class="side-nav-link">Renderers</a>
-                        <a href="#geoprocessor" class="side-nav-link">Geoprocessors</a>
+                        <a href="#geoprocessor" class="side-nav-link">Tasks</a>
                     </nav>
                 </aside>
 
@@ -110,7 +110,20 @@
                         <div id="resultQuerys" class="block-group block-group-4-up">
                     </div>
                 </div>
-
+                <div class="h-seccion">
+                    <a name="renderers"></a><h3>RENDERERS</h3>
+                </div>  
+                    <div>
+                        <div id="resultRenderers" class="block-group block-group-4-up">
+                    </div>
+                </div>
+                <div class="h-seccion">
+                    <a name="renderers"></a><h3>TASKS</h3>
+                </div>  
+                    <div>
+                        <div id="resultTasks" class="block-group block-group-4-up">
+                    </div>
+                </div>
 
             <script id="theTmpl" type="text/x-jsrender">
                 <div class="card block" style= "margin-bottom: 1rem;">
@@ -234,7 +247,7 @@
                   }
                 ];
 
-                 var dataQuerys = [
+                var dataQuerys = [
                   {
                     "miniatura": "img/query.png",
                     "linkWeb": "querys/query.html",
@@ -277,68 +290,118 @@
                   }
                 ];
 
+                var dataRenderer = [
+                  {
+                    "miniatura": "img/simpleRendererGL.png",
+                    "linkWeb": "renderer/simpleRendererGL.html",
+                    "alt":"miniatura app",
+                    "tittle": "SimpleRenderer en GraphicLayer",
+                    "description":"Aplicación que aplica un Simple Renderer los símbolos en una graphic layer cuando se hace clic en el mapa.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/simpleRendererGL.html"
+                  },
+                  {
+                    "miniatura": "img/simpleRendererFL.png",
+                    "linkWeb": "renderer/simpleRendererFL.html",
+                    "alt":"miniatura app",
+                    "tittle": "SimpleRenderer en FeatureLayer",
+                    "description":"Aplicación que aplica un Simple Renderer los símbolos en una Feature layer cuando se hace clic en el mapa.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/simpleRendererFL.html"
+                  },
+                  {
+                    "miniatura": "img/uniqueValueRenderer.png",
+                    "linkWeb": "renderer/UniqueValueRenderer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Unique Value Renderer",
+                    "description":"Aplicación que aplica un Unique Value Renderer a una capa de polígonos.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/UniqueValueRenderer.html"
+                  },
+                  {
+                    "miniatura": "img/classbreaksrenderer.png",
+                    "linkWeb": "renderer/classbreaksrenderer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Query a partir de un dibujo",
+                    "description":"Aplicación que aplica un Unique Value Renderer a una capa de polígonos.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/classbreaksrenderer.html"
+                  },
+                  {
+                    "miniatura": "img/heatmaprenderer.png",
+                    "linkWeb": "renderer/heatmaprenderer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Query and Popups",
+                    "description":"Aplicación que aplica un heatmap renderer a una capa de puntos.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/heatmaprenderer.html"
+                  }
+                ];
+
+                var dataTasks = [
+                  {
+                    "miniatura": "img/gp_syncrono.png",
+                    "linkWeb": "tasks/gp_syncrono.html",
+                    "alt":"miniatura app",
+                    "tittle": "Geoprocessor Síncrono",
+                    "description":"Aplicación que aplica que calcula una cuenca visual a partir de un punto.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/tasks/gp_syncrono.html"
+                  },
+                  {
+                    "miniatura": "img/simpleRendererFL.png",
+                    "linkWeb": "renderer/simpleRendererFL.html",
+                    "alt":"miniatura app",
+                    "tittle": "SimpleRenderer en FeatureLayer",
+                    "description":"Aplicación que aplica un Simple Renderer los símbolos en una Feature layer cuando se hace clic en el mapa.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/simpleRendererFL.html"
+                  },
+                  {
+                    "miniatura": "img/uniqueValueRenderer.png",
+                    "linkWeb": "renderer/UniqueValueRenderer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Unique Value Renderer",
+                    "description":"Aplicación que aplica un Unique Value Renderer a una capa de polígonos.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/UniqueValueRenderer.html"
+                  },
+                  {
+                    "miniatura": "img/classbreaksrenderer.png",
+                    "linkWeb": "renderer/classbreaksrenderer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Query a partir de un dibujo",
+                    "description":"Aplicación que aplica un Unique Value Renderer a una capa de polígonos.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/classbreaksrenderer.html"
+                  },
+                  {
+                    "miniatura": "img/heatmaprenderer.png",
+                    "linkWeb": "renderer/heatmaprenderer.html",
+                    "alt":"miniatura app",
+                    "tittle": "Query and Popups",
+                    "description":"Aplicación que aplica un heatmap renderer a una capa de puntos.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/heatmaprenderer.html"
+                  }
+                ];
+
                 var template = $.templates("#theTmpl");
 
                 var htmlOutputMapa = template.render(dataMapa);
                 var htmlOutputLayers = template.render(dataLayers);
                 var htmlOutputWidgets = template.render(dataWidgets);
                 var htmlOutputQuerys = template.render(dataQuerys);
+                var htmlOutputRenderers = template.render(dataRenderer);
+                var htmlOutputTasks = template.render(dataTasks);
+
 
 
                 $("#resultMapa").html(htmlOutputMapa);
                 $("#resultLayers").html(htmlOutputLayers);
                 $("#resultWidgets").html(htmlOutputWidgets);
                 $("#resultQuerys").html(htmlOutputQuerys);
+                $("#resultRenderers").html(htmlOutputRenderers);
+                $("#resultTasks").html(htmlOutputTasks);
+
+
 
             </script>
 
 
 
                 
-                
-               
-                <div class="h-seccion">
-                    <a name="renderers"></a><h3>RENDERERS</h3>
-                </div>
-                <div class="block-group block-group-4-up">
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="h-seccion">
+             <div class="h-seccion">
                     <a name="geoprocessor"></a><h3>GEOPROCESSOR</h3>
                 </div>
                 <div class="block-group block-group-4-up">

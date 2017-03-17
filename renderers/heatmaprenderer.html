@@ -5,8 +5,9 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <title></title>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
-	<script src="https://js.arcgis.com/3.19/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/dijit/calcite.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/themes/calcite/esri/esri.css">
+	<script src="https://js.arcgis.com/3.20/"></script>
 
 	<style>
 	html, body, #mapDiv {
@@ -37,7 +38,7 @@
 		    map = new Map("mapDiv", {
 		    	center: [-56.049, 38.485],
 		    	zoom: 3,
-		    	basemap: "gray",
+		    	basemap: "dark-gray",
 		    	isPanArrows: true
 		  	});
     		var renderer, featureLayer;
@@ -64,7 +65,7 @@
 	  });
 	</script>
 	</head>
-	<body class="claro">
+	<body class="calcite">
   		<div id="mapDiv"></div>
   	</body>
 </html>
