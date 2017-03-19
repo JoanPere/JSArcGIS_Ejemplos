@@ -62,7 +62,7 @@
                         <a href="#widgets" class="side-nav-link">Widgets</a>
                         <a href="#query" class="side-nav-link">Query</a>
                         <a href="#renderers" class="side-nav-link">Renderers</a>
-                        <a href="#geoprocessor" class="side-nav-link">Tasks</a>
+                        <a href="#tasks" class="side-nav-link">Tasks</a>
                     </nav>
                 </aside>
 
@@ -118,12 +118,15 @@
                     </div>
                 </div>
                 <div class="h-seccion">
-                    <a name="renderers"></a><h3>TASKS</h3>
+                    <a name="tasks"></a><h3>TASKS</h3>
                 </div>  
                     <div>
                         <div id="resultTasks" class="block-group block-group-4-up">
                     </div>
                 </div>
+            </div>
+
+        </div>
 
             <script id="theTmpl" type="text/x-jsrender">
                 <div class="card block" style= "margin-bottom: 1rem;">
@@ -339,40 +342,16 @@
                     "linkWeb": "tasks/gp_syncrono.html",
                     "alt":"miniatura app",
                     "tittle": "Geoprocessor Síncrono",
-                    "description":"Aplicación que aplica que calcula una cuenca visual a partir de un punto.",
+                    "description":"Aplicación que aplica que calcula un service área a partir de un punto.",
                     "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/tasks/gp_syncrono.html"
                   },
                   {
-                    "miniatura": "img/simpleRendererFL.png",
-                    "linkWeb": "renderer/simpleRendererFL.html",
+                    "miniatura": "img/ruta.png",
+                    "linkWeb": "tasks/ruta.html",
                     "alt":"miniatura app",
-                    "tittle": "SimpleRenderer en FeatureLayer",
-                    "description":"Aplicación que aplica un Simple Renderer los símbolos en una Feature layer cuando se hace clic en el mapa.",
-                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/simpleRendererFL.html"
-                  },
-                  {
-                    "miniatura": "img/uniqueValueRenderer.png",
-                    "linkWeb": "renderer/UniqueValueRenderer.html",
-                    "alt":"miniatura app",
-                    "tittle": "Unique Value Renderer",
-                    "description":"Aplicación que aplica un Unique Value Renderer a una capa de polígonos.",
-                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/UniqueValueRenderer.html"
-                  },
-                  {
-                    "miniatura": "img/classbreaksrenderer.png",
-                    "linkWeb": "renderer/classbreaksrenderer.html",
-                    "alt":"miniatura app",
-                    "tittle": "Query a partir de un dibujo",
-                    "description":"Aplicación que aplica un Unique Value Renderer a una capa de polígonos.",
-                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/classbreaksrenderer.html"
-                  },
-                  {
-                    "miniatura": "img/heatmaprenderer.png",
-                    "linkWeb": "renderer/heatmaprenderer.html",
-                    "alt":"miniatura app",
-                    "tittle": "Query and Popups",
-                    "description":"Aplicación que aplica un heatmap renderer a una capa de puntos.",
-                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/renderer/heatmaprenderer.html"
+                    "tittle": "Ruta",
+                    "description":"Aplicación que calcula rutas entre puntos, se le pueden añadir barreras y seleccionar modos de viaje.",
+                    "linkCode":"https://github.com/JoanPere/JSArcGIS_Ejemplos/blob/master/tasks/ruta.html"
                   }
                 ];
 
@@ -401,51 +380,9 @@
 
 
                 
-             <div class="h-seccion">
-                    <a name="geoprocessor"></a><h3>GEOPROCESSOR</h3>
-                </div>
-                <div class="block-group block-group-4-up">
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                    <div class="card block">
-                        <figure class="card-image-wrap">
-                            <img class="card-image" src="/master/JSArcGIS_Ejemplos/img/appthumbnail_2d.jpg" alt="Bridge Club, 1954">
-                        </figure>
-                        <div class="card-content">
-                            <h4><a href="#">Card with Image</a></h4>
-                            <p class="font-size--1">Cards can have full-bleed images with optional captions.</p>
-                        </div>
-                    </div>
-                </div>
+             
 
-            </div>
 
-        </div>
 
     <div class="footer" role="contentinfo">
         <!-- content of footer -->
