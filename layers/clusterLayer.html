@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+	<link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/themes/calcite/dijit/calcite.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/themes/calcite/esri/esri.css">
+
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	<script type="text/javascript">
+        window.dojoConfig = {
+            async: true,
+            packages: [
+            {
+                name: 'app',
+                location: window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/src'
+            }
+        ]};
+    </script>
+
+    <script src="https://js.arcgis.com/3.21/"></script>
+	
+	<script>
+		
+
+
+		require(["esri/map",
+			"esri/layers/ArcGISTiledMapServiceLayer",
+			"esri/layers/FeatureLayer",
+			"esri/InfoTemplate",
+        	"esri/graphic",
+        	"app/clusterfeaturelayer",
+			"dojo/domReady!"], 
+		function(Map, 
+			ArcGISTiledMapServiceLayer,
+			FeatureLayer,
+			InfoTemplate,
+			Graphic,
+			ClusterFeatureLayer) {
+	    
+			var popup,
+            	clusterLayer,
+            	geocoder,
+            	infoTemplate,
+            	selectedSym;
+
+	    	// code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-56.049, 38.485],
+		    	zoom: 3,
+		    	basemap: "dark-gray",
+		    	isPanArrows: true
+		  	});
+
+		  	map.on("load", function () {
+            // Add layer
+           		addClusterLayer();
+            	addClusterLayerEvents();
+        	});
+
+	        	// Create a feature layer to get feature service
+	        function addClusterLayer() {
+	            clusterLayer = new ClusterFeatureLayer({
+	                "url": "http://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Cities/FeatureServer/0",
+	                "distance": 75,
+	                "id": "clusters",
+	                "labelColor": "#fff",
+	                "resolution": map.extent.getWidth() / map.width,
+	                "singleTemplate": infoTemplate,
+	                "useDefaultSymbol": false,
+	                "zoomOnClick": true,
+	                "showSingles": true,
+	                "objectIdField": "FID",
+	                outFields: ["CITY_NAME", "CNTRY_NAME", "POP", "ADMIN_NAME"]
+	            });
+	            map.addLayer(clusterLayer);
+	        }
+
+		        // Hide popup if selected feature is clustered
+	        function onClustersShown(clusters) {
+	            var  i = 0,
+	                extent;
+	            if (map.infoWindow.isShowing && map.infoWindow._lastSelected) {
+	                for (i; i < clusters.length; i++) {
+	                    if (clusters[i].attributes.clusterCount > 1) {
+	                        extent = clusterLayer._getClusterExtent(clusters[i]);
+	                        if (extent.contains(map.infoWindow._lastSelected.geometry)) {
+	                            map.infoWindow.hide();
+	                            break;
+	                        }
+	                    }
+	                }
+	            }
+	        }
+
+		        // Wire cluster layer events
+	        function addClusterLayerEvents() {
+	            // Clusters drawn
+	            clusterLayer.on("clusters-shown", onClustersShown);
+	        }
+
+	        // Save the last selected graphic
+	        map.infoWindow.on("selection-change", function () {
+	            addSelectedFeature();
+	        });
+
+            // Set popup
+	        popup = map.infoWindow;
+	        popup.highlight = false;
+	        popup.titleInBody = false;
+	        popup.domNode.className += " light";
+	        // Popup content
+	        infoTemplate = new InfoTemplate("<b>City Data</b>", "<p>NAME: ${CITY_NAME}</p><p>COUNTRY: ${CNTRY_NAME}</p><p>CAPITAL: ${ADMIN_NAME}</p><p>POPULATION: ${POP}</p>");
+
+
+	        // Set selected
+	        /*function addSelectedFeature() {
+	            var selIndex = map.infoWindow.selectedIndex,
+	                selFeature;
+	            if (selIndex !== -1) {
+	                selFeature = map.infoWindow.features[selIndex];
+	                // Remove old feature first
+	                removeSelectedFeature();
+	                // Add new graphic
+	                map.infoWindow._lastSelected = new Graphic(selFeature.toJson());
+	                map.infoWindow._lastSelected.setSymbol(selectedSym);
+	                map.graphics.add(map.infoWindow._lastSelected);
+	            }
+	        }*/
+
+	        // Remove selected
+	        /*function removeSelectedFeature() {
+	            if (map.infoWindow._lastSelected) {
+	                map.graphics.remove(map.infoWindow._lastSelected);
+	                map.infoWindow._lastSelected = null;
+	            }
+	        }*/
+
+
+		    
+	  });
+	</script>
+	</head>
+	<body class="calcite">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>
