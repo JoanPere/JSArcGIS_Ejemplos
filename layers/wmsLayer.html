@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+	<link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/themes/calcite/dijit/calcite.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/themes/calcite/esri/esri.css">
+	<script src="https://js.arcgis.com/3.21/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>
+		var map;
+		
+		var urlWMS = "http://www.ign.es/wms-inspire/mapa-raster?SERVICE=WMS";
+
+		require(["esri/map",
+			"esri/layers/WMSLayer",
+			"dojo/domReady!"], 
+		function(Map, 
+			WMSLayer) {
+
+			esriConfig.defaults.io.proxyUrl = "../proxy/proxy.jsp"
+
+	    // code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-3.637343, 40.429491],
+		    	zoom: 7,
+		    	basemap: "dark-gray",
+		    	isPanArrows: true
+		  	});
+	    
+		    var wmsLayer = new WMSLayer(urlWMS,
+		    	{
+		    		format: "png",
+		    		visibleLayers:[0]
+		    	});
+
+		    map.addLayer(wmsLayer);
+
+	  });
+	
+
+	</script>
+	</head>
+	<body class="calcite">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>
