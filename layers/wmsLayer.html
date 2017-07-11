@@ -27,7 +27,8 @@
 		function(Map, 
 			WMSLayer) {
 
-			esriConfig.defaults.io.proxyUrl = "../proxy/proxy.jsp"
+			//modificar según la dirección del proxy de cada uno
+			esriConfig.defaults.io.proxyUrl = "../DotNet/proxy.ashx"
 
 	    // code to create the map and add a basemap will go here
 		    map = new Map("mapDiv", {
