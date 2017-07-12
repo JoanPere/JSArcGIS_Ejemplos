@@ -19,32 +19,46 @@
 	<script>
 		var map;
 		
-		var urlCSV = "http://www.ign.es/wms-inspire/mapa-raster?SERVICE=WMS";
-
+		var urlCSVRadares = "http://datos.madrid.es/egob/catalogo/300049-0-radares-fijos-moviles.csv";
+		
 		require(["esri/map",
-			"esri/layers/WMSLayer",
+			"esri/layers/CSVLayer",
+			"esri/Color",
+        	"esri/symbols/SimpleMarkerSymbol",
+        	"esri/renderers/SimpleRenderer",
 			"dojo/domReady!"], 
 		function(Map, 
-			WMSLayer) {
+			CSVLayer,
+			Color, 
+			SimpleMarkerSymbol, 
+			SimpleRenderer) {
 
-			//modificar según la dirección del proxy de cada uno
-			esriConfig.defaults.io.proxyUrl = "../DotNet/proxy.ashx"
+			esriConfig.defaults.io.corsEnabledServers.push("http://datos.madrid.es/");
+			
+			esriConfig.defaults.io.alwaysUseProxy = true;
+			esriConfig.defaults.io.proxyUrl = "../proxy/proxy.ashx"
 
 	    // code to create the map and add a basemap will go here
 		    map = new Map("mapDiv", {
 		    	center: [-3.637343, 40.429491],
-		    	zoom: 7,
+		    	zoom: 10
+		    	,
 		    	basemap: "dark-gray",
 		    	isPanArrows: true
 		  	});
 	    
-		    var wmsLayer = new WMSLayer(urlWMS,
+		    var csvLayer = new CSVLayer(urlCSVRadares,
 		    	{
-		    		format: "png",
-		    		visibleLayers:[0]
+		    		latitudeFieldName: "Latitud",
+		    		longitudeFieldName:"Longitud"
 		    	});
 
-		    map.addLayer(wmsLayer);
+		    var orangeRed = new Color([238, 69, 0, 0.5]); // hex is #ff4500
+        	var marker = new SimpleMarkerSymbol("solid", 15, null, orangeRed);
+        	var renderer = new SimpleRenderer(marker);
+        	csvLayer.setRenderer(renderer);
+
+		    map.addLayer(csvLayer);
 
 	  });
 	
