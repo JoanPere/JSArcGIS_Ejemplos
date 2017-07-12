@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+
+	<link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/themes/calcite/dijit/calcite.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/themes/calcite/esri/esri.css">
+	<script src="https://js.arcgis.com/3.21/"></script>
+
+	<style>
+	html, body, #mapDiv {
+		padding: 0;
+		margin: 0;
+		height: 100%;}
+	</style>
+	
+	<script>
+		var map;
+		
+		var urlCamarasMadrid = "http://datos.madrid.es/egob/catalogo/202088-0-trafico-camaras.kml";
+		var urlEstacionesServicio = "http://geoportalgasolineras.es/resources/files/EstacionesDeServicio.kml";
+		
+		require(["esri/map",
+			"esri/layers/KMLLayer",
+			"esri/Color",
+        	"esri/symbols/SimpleMarkerSymbol",
+        	"esri/renderers/SimpleRenderer",
+			"dojo/domReady!"], 
+		function(Map, 
+			KMLLayer ,
+			Color, 
+			SimpleMarkerSymbol, 
+			SimpleRenderer) {
+
+			esriConfig.defaults.io.corsEnabledServers.push("http://datos.madrid.es/");
+			
+			//esriConfig.defaults.io.alwaysUseProxy = true;
+			//esriConfig.defaults.io.proxyUrl = "../proxy/proxy.ashx"
+
+	    // code to create the map and add a basemap will go here
+		    map = new Map("mapDiv", {
+		    	center: [-3.637343, 40.429491],
+		    	zoom: 14
+		    	,
+		    	basemap: "streets-night-vector",
+		    	isPanArrows: true
+		  	});
+	    
+		    var kmlLayer = new KMLLayer(urlCamarasMadrid);
+
+		    /*var orangeRed = new Color([238, 69, 0, 0.5]); // hex is #ff4500
+        	var marker = new SimpleMarkerSymbol("solid", 15, null, orangeRed);
+        	var renderer = new SimpleRenderer(marker);
+        	csvLayer.setRenderer(renderer);*/
+        	kmlLayer.setRefreshInterval(1);
+		    map.addLayer(kmlLayer);
+
+	  });
+	
+
+	</script>
+	</head>
+	<body class="calcite">
+  		<div id="mapDiv"></div>
+  	</body>
+</html>
