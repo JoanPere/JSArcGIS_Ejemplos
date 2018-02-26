@@ -183,60 +183,14 @@
 							//se añade la entidad al mapa
 						map.graphics.add(features[i]);
 							//se ejecuta la función poblar tabla
-						poblarTabla(features[i])
+						
 					}
 				} else {
 					alert("no se ha encontrado ninguna entidad que cumpla las condiciones");
 				}
 			};
 
-			//función que añade una fila con los respectivos valores de los atributos a la tabla
-			function poblarTabla(feature){
-				var tbody = document.getElementById("tbody");
-					
-
-					//se recuperan los atributos de la entidad que llega a la función
-				var atributos = feature.attributes;
-				var oid = atributos.objectid;
-				var nombre = atributos.areaname;
-				var poblacion = atributos.pop2000;
-				var filaData = [oid, nombre, poblacion];
-
-
-					//se crea un elemento fila para la tabla
-				var fila = document.createElement("tr");
-				
-					//se recorren los datos de los atributos
-				
-
-
-
-				for(i in filaData){
-						//se crea un elemento celda
-					var celda = document.createElement("td");
-						//se crea un elemento de texto con el valor del atributo
-					var textoCelda = document.createTextNode(filaData[i])
-						//se añade el valor a la celda
-					celda.appendChild(textoCelda);
-						//se añade la celda a la fila
-					fila.appendChild(celda);
-				}
-					//se añade la fila a la tabla
-				tbody.appendChild(fila);
-			};
-
-				//función que borra todas las filas de una tabla
-			function borrarTabla(){
-					//se recoje la tabla
-				var tbody = document.getElementById("tbody");
-					//se comprueba que la tabla tenga algún elemento
-				if (tbody.firstChild){
-						//mientras la tabla tenga una fila, se borrará este elemento
-					while(tbody.firstChild){
-						tbody.removeChild(tbody.firstChild);
-					};
-				}
-			};
+			
 	  	});
 	</script>
 	</head>
